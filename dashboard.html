@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - HomeDirect Ethiopia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1E3A5F;
+            --primary-dark: #0f2440;
+            --secondary: #DA121A;
+            --secondary-dark: #b30e15;
+            --accent: #FCD116;
+            --green: #00843D;
+            --white: #FFFFFF;
+            --light-gray: #F7FAFC;
+            --gray: #E2E8F0;
+            --dark-gray: #4A5568;
+            --text-dark: #2D3748;
+            --text-light: #718096;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.15);
+            --gradient-primary: linear-gradient(135deg, #1E3A5F 0%, #DA121A 100%);
+            --gradient-success: linear-gradient(135deg, #00843D 0%, #FCD116 100%);
+            --border-radius: 12px;
+            --border-radius-lg: 20px;
+            --border-radius-xl: 30px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans Ethiopic', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background: var(--light-gray);
+        }
+
+        .amharic {
+            font-family: 'Noto Sans Ethiopic', sans-serif;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .dashboard-sidebar {
+            background: var(--primary);
+            color: white;
+            padding: 2rem 0;
+        }
+        
+        .sidebar-header {
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .user-avatar-large {
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .user-details h4 {
+            margin-bottom: 0.3rem;
+            color: white;
+        }
+        
+        .user-details p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .sidebar-nav {
+            padding: 2rem 0;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .nav-item i {
+            width: 20px;
+        }
+        
+        .nav-item .badge {
+            margin-left: auto;
+            background: var(--secondary);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+        }
+        
+        /* Main Content */
+        .dashboard-main {
+            background: var(--light-gray);
+            padding: 2rem;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .date-display {
+            color: var(--text-light);
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(30, 58, 95, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(218, 18, 26, 0.4);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(30,58,95,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .stat-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .stat-content p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .chart-container {
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            gap: 0.5rem;
+        }
+        
+        .bar {
+            flex: 1;
+            background: var(--primary);
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            transition: var(--transition);
+            min-height: 20px;
+        }
+        
+        .bar:hover {
+            background: var(--secondary);
+        }
+        
+        .bar::after {
+            content: attr(data-value);
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+        }
+        
+        /* Recent Activity */
+        .activity-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+        
+        .activity-list {
+            margin-top: 1rem;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray);
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(30,58,95,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        /* My Properties */
+        .properties-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .properties-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .property-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .property-table th {
+            text-align: left;
+            padding: 1rem 0;
+            color: var(--text-light);
+            font-weight: 500;
+            border-bottom: 2px solid var(--gray);
+        }
+        
+        .property-table td {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray);
+        }
+        
+        .property-status {
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .action-btn {
+            padding: 0.3rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 0.2rem;
+            color: white;
+        }
+        
+        .action-btn.edit {
+            background: var(--primary);
+        }
+        
+        .action-btn.delete {
+            background: var(--secondary);
+        }
+        
+        /* Verification Progress */
+        .verification-progress {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .progress-step {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+        
+        .progress-circle {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: 2px solid var(--gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-weight: 600;
+        }
+        
+        .progress-step.completed .progress-circle {
+            background: var(--green);
+            border-color: var(--green);
+            color: white;
+        }
+        
+        .progress-step.active .progress-circle {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .progress-line {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gray);
+            z-index: 1;
+        }
+        
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--gray);
+            border-radius: var(--border-radius);
+            font-family: inherit;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid var(--gray);
+            margin: 2rem 0;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: var(--border-radius-xl);
+            max-width: 500px;
+            position: relative;
+        }
+        
+        .close {
+            position: absolute;
+            right: 1.5rem;
+            top: 1rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 10001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification-success {
+            border-left: 4px solid var(--green);
+        }
+        
+        .notification-warning {
+            border-left: 4px solid var(--accent);
+        }
+        
+        .notification-error {
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .notification-info {
+            border-left: 4px solid var(--primary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-header">
+                <div class="logo" onclick="navigateTo('index')">
+                    HomeDirect
+                </div>
+                <div class="user-info" id="userInfo">
+                    <!-- Loaded via JS -->
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-item active" onclick="loadDashboardTab('overview')">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span data-en="Overview" data-am="አጠቃላይ እይታ">Overview</span>
+                </div>
+                <div class="nav-item" onclick="loadDashboardTab('properties')">
+                    <i class="fas fa-home"></i>
+                    <span data-en="My Properties" data-am="ንብረቶቼ">My Properties</span>
+                    <span class="badge" id="propertyCount">0</span>
+                </div>
+                <div class="nav-item" onclick="loadDashboardTab('favorites')">
+                    <i class="fas fa-heart"></i>
+                    <span data-en="Favorites" data-am="የምወዳቸው">Favorites</span>
+                    <span class="badge" id="favoritesCount">0</span>
+                </div>
+                <div class="nav-item" onclick="loadDashboardTab('messages')">
+                    <i class="fas fa-envelope"></i>
+                    <span data-en="Messages" data-am="መልዕክቶች">Messages</span>
+                    <span class="badge" id="messageCount">3</span>
+                </div>
+                <div class="nav-item" onclick="loadDashboardTab('verification')">
+                    <i class="fas fa-shield-alt"></i>
+                    <span data-en="Verification" data-am="ማረጋገጫ">Verification</span>
+                    <span class="badge" id="verificationStatus">Pending</span>
+                </div>
+                <div class="nav-item" onclick="loadDashboardTab('payments')">
+                    <i class="fas fa-credit-card"></i>
+                    <span data-en="Payments" data-am="ክፍያዎች">Payments</span>
+                </div>
+                <div class="nav-item" onclick="loadDashboardTab('analytics')">
+                    <i class="fas fa-chart-line"></i>
+                    <span data-en="Analytics" data-am="ትንተና">Analytics</span>
+                </div>
+                <div class="nav-item" onclick="loadDashboardTab('settings')">
+                    <i class="fas fa-cog"></i>
+                    <span data-en="Settings" data-am="ማስተካከያ">Settings</span>
+                </div>
+                <div class="nav-item" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span data-en="Logout" data-am="ውጣ">Logout</span>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main" id="dashboardMain">
+            <!-- Header -->
+            <div class="dashboard-header">
+                <h1 data-en="Dashboard Overview" data-am="ዳሽቦርድ አጠቃላይ እይታ" id="dashboardTitle">
+                    Dashboard Overview
+                </h1>
+                <div class="date-display" id="currentDate"></div>
+            </div>
+
+            <!-- Dynamic Content -->
+            <div id="dashboardContent">
+                <!-- Content loaded via JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Login Modal (if not logged in) -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('login')">&times;</span>
+            <h2 data-en="Login Required" data-am="መግባት ያስፈልጋል">Login Required</h2>
+            <p data-en="Please login to access your dashboard" data-am="ዳሽቦርድዎን ለመጠቀም እባክዎ ይግቡ">Please login to access your dashboard</p>
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="window.location.href='index.html'">
+                    <span data-en="Go to Home" data-am="ወደ መነሻ ይሂዱ">Go to Home</span>
+                </button>
+                <button class="btn btn-outline" onclick="closeModal('login')">
+                    <span data-en="Cancel" data-am="ሰርዝ">Cancel</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== GLOBAL VARIABLES =====
+        let currentUser = null;
+        let currentLanguage = 'en';
+        let currentDashboardTab = 'overview';
+        
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            checkAuthStatus();
+            
+            if (!currentUser) {
+                // Show login modal if not logged in
+                setTimeout(() => {
+                    openModal('login');
+                }, 500);
+                return;
+            }
+            
+            // Set current date
+            updateDate();
+            
+            // Load user data
+            loadUserInfo();
+            loadDashboardData();
+        });
+        
+        // ===== AUTHENTICATION =====
+        function checkAuthStatus() {
+            const user = localStorage.getItem('currentUser');
+            if (user) {
+                try {
+                    currentUser = JSON.parse(user);
+                } catch (e) {
+                    currentUser = null;
+                }
+            }
+            
+            // If no user, create a demo user for testing
+            if (!currentUser) {
+                // For demo purposes, create a test user
+                currentUser = {
+                    id: 'USR' + Math.floor(Math.random() * 10000),
+                    name: 'Demo User',
+                    email: 'demo@example.com',
+                    phone: '+251 911 234 567',
+                    verified: false,
+                    joinDate: new Date().toISOString()
+                };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            }
+        }
+        
+        // ===== UI FUNCTIONS =====
+        function updateDate() {
+            const dateEl = document.getElementById('currentDate');
+            if (dateEl) {
+                dateEl.textContent = new Date().toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+        }
+        
+        function loadUserInfo() {
+            const container = document.getElementById('userInfo');
+            if (!container || !currentUser) return;
+            
+            container.innerHTML = `
+                <div class="user-avatar-large">${currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}</div>
+                <div class="user-details">
+                    <h4>${currentUser.name || 'User'}</h4>
+                    <p>${currentUser.verified ? '✓ Verified' : '⚠ Not Verified'}</p>
+                </div>
+            `;
+            
+            // Update verification status
+            const statusEl = document.getElementById('verificationStatus');
+            if (statusEl) {
+                statusEl.textContent = currentUser.verified ? 'Verified' : 'Pending';
+                statusEl.style.background = currentUser.verified ? 'var(--green)' : 'var(--accent)';
+            }
+        }
+        
+        function loadDashboardData() {
+            // Load user properties
+            const userProperties = JSON.parse(localStorage.getItem('userProperties') || '[]');
+            document.getElementById('propertyCount').textContent = userProperties.length;
+            
+            // Load favorites
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            document.getElementById('favoritesCount').textContent = favorites.length;
+            
+            // Load main content
+            loadOverviewContent();
+        }
+        
+        function loadOverviewContent() {
+            const container = document.getElementById('dashboardContent');
+            const userProperties = JSON.parse(localStorage.getItem('userProperties') || '[]');
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            
+            container.innerHTML = `
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>${userProperties.length}</h3>
+                            <p data-en="Properties Listed" data-am="የተዘረዘሩ ንብረቶች">Properties Listed</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>1,234</h3>
+                            <p data-en="Total Views" data-am="አጠቃላይ እይታዎች">Total Views</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>56</h3>
+                            <p data-en="Inquiries" data-am="ጥያቄዎች">Inquiries</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>4.8</h3>
+                            <p data-en="Average Rating" data-am="አማካይ ደረጃ">Average Rating</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 data-en="Monthly Views" data-am="ወርሃዊ እይታዎች">Monthly Views</h3>
+                            <select onchange="updateChart('views', this.value)">
+                                <option value="6">Last 6 months</option>
+                                <option value="12">Last 12 months</option>
+                            </select>
+                        </div>
+                        <div class="chart-container">
+                            <div class="bar" style="height: 40%;" data-value="40"></div>
+                            <div class="bar" style="height: 60%;" data-value="60"></div>
+                            <div class="bar" style="height: 75%;" data-value="75"></div>
+                            <div class="bar" style="height: 50%;" data-value="50"></div>
+                            <div class="bar" style="height: 85%;" data-value="85"></div>
+                            <div class="bar" style="height: 70%;" data-value="70"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 data-en="Inquiries by Property" data-am="እንደየንብረቱ ጥያቄዎች">Inquiries by Property</h3>
+                        </div>
+                        <div class="chart-container">
+                            <div class="bar" style="height: 30%;" data-value="30"></div>
+                            <div class="bar" style="height: 45%;" data-value="45"></div>
+                            <div class="bar" style="height: 60%;" data-value="60"></div>
+                            <div class="bar" style="height: 25%;" data-value="25"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="activity-section">
+                    <h3 data-en="Recent Activity" data-am="የቅርብ ጊዜ እንቅስቃሴ">Recent Activity</h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>Your property in Bole was viewed 15 times</p>
+                                <span class="activity-time">2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>New inquiry about your apartment</p>
+                                <span class="activity-time">5 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>You received a 5-star rating</p>
+                                <span class="activity-time">1 day ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- My Properties -->
+                <div class="properties-section">
+                    <div class="properties-header">
+                        <h3 data-en="My Properties" data-am="ንብረቶቼ">My Properties</h3>
+                        <button class="btn btn-primary" onclick="navigateTo('sell')">
+                            <i class="fas fa-plus"></i> <span data-en="Add New" data-am="አዲስ ጨምር">Add New</span>
+                        </button>
+                    </div>
+                    
+                    <table class="property-table">
+                        <thead>
+                            <tr>
+                                <th data-en="Property" data-am="ንብረት">Property</th>
+                                <th data-en="Type" data-am="አይነት">Type</th>
+                                <th data-en="Price" data-am="ዋጋ">Price</th>
+                                <th data-en="Status" data-am="ሁኔታ">Status</th>
+                                <th data-en="Views" data-am="እይታዎች">Views</th>
+                                <th data-en="Actions" data-am="ድርጊቶች">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${userProperties.length === 0 ? 
+                                `<tr>
+                                    <td colspan="6" style="text-align: center; padding: 2rem;">
+                                        <p data-en="No properties listed yet" data-am="እስካሁን ምንም ንብረት አልተዘረዘረም">
+                                            No properties listed yet
+                                        </p>
+                                        <button class="btn btn-primary" onclick="navigateTo('sell')" style="margin-top: 1rem;">
+                                            <span data-en="Post Your First Property" data-am="የመጀመሪያ ንብረትዎን ይለጥፉ">
+                                                Post Your First Property
+                                            </span>
+                                        </button>
+                                    </td>
+                                </tr>` :
+                                userProperties.map(prop => `
+                                    <tr>
+                                        <td>${prop.title || 'Property'}</td>
+                                        <td>${prop.type || 'Sale'}</td>
+                                        <td>₿${prop.price?.toLocaleString() || '0'}</td>
+                                        <td><span class="property-status status-${prop.status || 'active'}">${prop.status || 'Active'}</span></td>
+                                        <td>${prop.views || 0}</td>
+                                        <td>
+                                            <button class="action-btn edit" onclick="editProperty('${prop.id}')">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteProperty('${prop.id}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Verification Progress -->
+                <div class="verification-progress">
+                    <h3 data-en="FaydaID Verification Status" data-am="የፋይዳ አይዲ ማረጋገጫ ሁኔታ">
+                        FaydaID Verification Status
+                    </h3>
+                    
+                    <div class="progress-steps">
+                        <div class="progress-line"></div>
+                        <div class="progress-step ${currentUser.verified ? 'completed' : 'completed'}" id="step1">
+                            <div class="progress-circle">1</div>
+                            <span data-en="ID Uploaded" data-am="መታወቂያ ተስቀሏል">ID Uploaded</span>
+                        </div>
+                        <div class="progress-step ${currentUser.verified ? 'completed' : 'active'}" id="step2">
+                            <div class="progress-circle">2</div>
+                            <span data-en="Verification" data-am="ማረጋገጫ">Verification</span>
+                        </div>
+                        <div class="progress-step ${currentUser.verified ? 'completed' : ''}" id="step3">
+                            <div class="progress-circle">3</div>
+                            <span data-en="Approved" data-am="ጸድቋል">Approved</span>
+                        </div>
+                    </div>
+                    
+                    ${!currentUser.verified ? 
+                        '<button class="btn btn-primary" onclick="navigateTo(\'verification\')">Complete Verification</button>' : 
+                        '<p style="color: var(--green);"><i class="fas fa-check-circle"></i> You are verified!</p>'
+                    }
+                </div>
+            `;
+        }
+        
+        // ===== NAVIGATION =====
+        function navigateTo(page) {
+            switch(page) {
+                case 'index':
+                    window.location.href = 'index.html';
+                    break;
+                case 'sell':
+                    window.location.href = 'sell.html';
+                    break;
+                case 'verification':
+                    window.location.href = 'verification.html';
+                    break;
+                default:
+                    window.location.href = page + '.html';
+            }
+        }
+        
+        function loadDashboardTab(tab) {
+            currentDashboardTab = tab;
+            
+            // Update active nav
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            // Update title
+            const titles = {
+                'overview': 'Dashboard Overview',
+                'properties': 'My Properties',
+                'favorites': 'Favorites',
+                'messages': 'Messages',
+                'verification': 'Verification',
+                'payments': 'Payments',
+                'analytics': 'Analytics',
+                'settings': 'Settings'
+            };
+            
+            const titleEl = document.getElementById('dashboardTitle');
+            if (titleEl) {
+                titleEl.innerHTML = titles[tab];
+            }
+            
+            // Load tab content
+            switch(tab) {
+                case 'overview':
+                    loadOverviewContent();
+                    break;
+                case 'properties':
+                    loadPropertiesTab();
+                    break;
+                case 'favorites':
+                    loadFavoritesTab();
+                    break;
+                case 'messages':
+                    loadMessagesTab();
+                    break;
+                case 'verification':
+                    loadVerificationTab();
+                    break;
+                case 'payments':
+                    loadPaymentsTab();
+                    break;
+                case 'analytics':
+                    loadAnalyticsTab();
+                    break;
+                case 'settings':
+                    loadSettingsTab();
+                    break;
+            }
+        }
+        
+        function loadPropertiesTab() {
+            const container = document.getElementById('dashboardContent');
+            const userProperties = JSON.parse(localStorage.getItem('userProperties') || '[]');
+            
+            container.innerHTML = `
+                <div class="properties-section">
+                    <div class="properties-header">
+                        <h3 data-en="My Properties" data-am="ንብረቶቼ">My Properties</h3>
+                        <button class="btn btn-primary" onclick="navigateTo('sell')">
+                            <i class="fas fa-plus"></i> <span data-en="Add New" data-am="አዲስ ጨምር">Add New</span>
+                        </button>
+                    </div>
+                    
+                    <table class="property-table">
+                        <thead>
+                            <tr>
+                                <th data-en="Property" data-am="ንብረት">Property</th>
+                                <th data-en="Type" data-am="አይነት">Type</th>
+                                <th data-en="Price" data-am="ዋጋ">Price</th>
+                                <th data-en="Status" data-am="ሁኔታ">Status</th>
+                                <th data-en="Views" data-am="እይታዎች">Views</th>
+                                <th data-en="Inquiries" data-am="ጥያቄዎች">Inquiries</th>
+                                <th data-en="Actions" data-am="ድርጊቶች">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${userProperties.length === 0 ? 
+                                '<tr><td colspan="7" style="text-align: center; padding: 2rem;">No properties listed yet</td></tr>' :
+                                userProperties.map(prop => `
+                                    <tr>
+                                        <td>${prop.title || 'Property'}</td>
+                                        <td>${prop.type || 'Sale'}</td>
+                                        <td>₿${prop.price?.toLocaleString() || '0'}</td>
+                                        <td><span class="property-status status-${prop.status || 'active'}">${prop.status || 'Active'}</span></td>
+                                        <td>${prop.views || 0}</td>
+                                        <td>${prop.inquiries || 0}</td>
+                                        <td>
+                                            <button class="action-btn edit" onclick="editProperty('${prop.id}')">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-btn delete" onclick="deleteProperty('${prop.id}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+        
+        function loadFavoritesTab() {
+            const container = document.getElementById('dashboardContent');
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            
+            container.innerHTML = `
+                <div class="properties-section">
+                    <h3 data-en="Favorite Properties" data-am="ተወዳጅ ንብረቶች">Favorite Properties</h3>
+                    ${favorites.length === 0 ? 
+                        '<p style="text-align: center; padding: 2rem;">No favorites yet</p>' : 
+                        '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">' + 
+                        favorites.map(fav => `
+                            <div class="property-card" style="background: white; padding: 1rem; border-radius: var(--border-radius); cursor: pointer;" onclick="viewProperty('${fav.id}')">
+                                <div style="height: 150px; background: var(--gradient-primary); border-radius: var(--border-radius); display: flex; align-items: center; justify-content: center; color: white; margin-bottom: 1rem;">
+                                    <i class="fas fa-home fa-3x"></i>
+                                </div>
+                                <h4>${fav.title || 'Property'}</h4>
+                                <p>₿${fav.price?.toLocaleString() || '0'}</p>
+                            </div>
+                        `).join('') + '</div>'
+                    }
+                </div>
+            `;
+        }
+        
+        function loadMessagesTab() {
+            const container = document.getElementById('dashboardContent');
+            
+            container.innerHTML = `
+                <div class="activity-section">
+                    <h3 data-en="Messages" data-am="መልዕክቶች">Messages</h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Alemitu T.:</strong> Interested in your property in Bole</p>
+                                <span class="activity-time">10 min ago</span>
+                            </div>
+                            <button class="btn btn-primary" onclick="openChat('alemitu')">Reply</button>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Biruk D.:</strong> When can I schedule a visit?</p>
+                                <span class="activity-time">1 hour ago</span>
+                            </div>
+                            <button class="btn btn-primary" onclick="openChat('biruk')">Reply</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function loadVerificationTab() {
+            const container = document.getElementById('dashboardContent');
+            
+            container.innerHTML = `
+                <div class="verification-progress">
+                    <h3 data-en="FaydaID Verification" data-am="ፋይዳ አይዲ ማረጋገጫ">FaydaID Verification</h3>
+                    
+                    <div class="progress-steps">
+                        <div class="progress-line"></div>
+                        <div class="progress-step ${currentUser.verified ? 'completed' : 'completed'}">
+                            <div class="progress-circle">1</div>
+                            <span data-en="ID Uploaded" data-am="መታወቂያ ተስቀሏል">ID Uploaded</span>
+                        </div>
+                        <div class="progress-step ${currentUser.verified ? 'completed' : 'active'}">
+                            <div class="progress-circle">2</div>
+                            <span data-en="Verification" data-am="ማረጋገጫ">Verification</span>
+                        </div>
+                        <div class="progress-step ${currentUser.verified ? 'completed' : ''}">
+                            <div class="progress-circle">3</div>
+                            <span data-en="Approved" data-am="ጸድቋል">Approved</span>
+                        </div>
+                    </div>
+                    
+                    ${!currentUser.verified ? 
+                        '<button class="btn btn-primary" onclick="navigateTo(\'verification\')">Continue Verification</button>' : 
+                        '<p style="color: var(--green);"><i class="fas fa-check-circle"></i> You are verified!</p>'
+                    }
+                </div>
+            `;
+        }
+        
+        function loadPaymentsTab() {
+            const container = document.getElementById('dashboardContent');
+            
+            container.innerHTML = `
+                <div class="properties-section">
+                    <h3 data-en="Payment History" data-am="የክፍያ ታሪክ">Payment History</h3>
+                    <table class="property-table">
+                        <thead>
+                            <tr>
+                                <th data-en="Date" data-am="ቀን">Date</th>
+                                <th data-en="Property" data-am="ንብረት">Property</th>
+                                <th data-en="Amount" data-am="መጠን">Amount</th>
+                                <th data-en="Status" data-am="ሁኔታ">Status</th>
+                                <th data-en="Receipt" data-am="ደረሰኝ">Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2026-02-15</td>
+                                <td>Bole Villa</td>
+                                <td>₿4,500,000</td>
+                                <td><span class="property-status status-active">Completed</span></td>
+                                <td><button class="btn btn-outline" onclick="downloadReceipt()">Download</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+        
+        function loadAnalyticsTab() {
+            const container = document.getElementById('dashboardContent');
+            
+            container.innerHTML = `
+                <div class="charts-section">
+                    <div class="chart-card">
+                        <h3 data-en="Property Views Over Time" data-am="የንብረት እይታዎች በጊዜ ሂደት">Property Views Over Time</h3>
+                        <div style="height: 300px; display: flex; align-items: center; justify-content: center;">
+                            <canvas id="viewsChart" style="width: 100%; height: 100%;"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stats-grid" style="margin-top: 2rem;">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="stat-content">
+                            <h3>+45%</h3>
+                            <p data-en="Growth" data-am="እድገት">Growth</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="stat-content">
+                            <h3>89</h3>
+                            <p data-en="Unique Visitors" data-am="ልዩ ጎብኚዎች">Unique Visitors</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Initialize chart
+            setTimeout(() => {
+                const canvas = document.getElementById('viewsChart');
+                if (canvas) {
+                    const ctx = canvas.getContext('2d');
+                    if (ctx) {
+                        // Simple chart drawing
+                        ctx.fillStyle = '#1E3A5F';
+                        const data = [40, 60, 75, 50, 85, 70];
+                        const width = canvas.width / data.length - 10;
+                        
+                        data.forEach((value, i) => {
+                            ctx.fillRect(i * (width + 10), canvas.height - value * 2, width, value * 2);
+                        });
+                    }
+                }
+            }, 100);
+        }
+        
+        function loadSettingsTab() {
+            const container = document.getElementById('dashboardContent');
+            
+            container.innerHTML = `
+                <div class="properties-section">
+                    <h3 data-en="Account Settings" data-am="የመለያ ማስተካከያ">Account Settings</h3>
+                    
+                    <form id="settingsForm" style="max-width: 500px;">
+                        <div class="form-group">
+                            <label data-en="Full Name" data-am="ሙሉ ስም">Full Name</label>
+                            <input type="text" value="${currentUser.name || ''}" id="settingsName">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label data-en="Email" data-am="ኢሜይል">Email</label>
+                            <input type="email" value="${currentUser.email || ''}" id="settingsEmail">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label data-en="Phone" data-am="ስልክ">Phone</label>
+                            <input type="tel" value="${currentUser.phone || '+251 911 234 567'}" id="settingsPhone">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label data-en="Language Preference" data-am="የቋንቋ ምርጫ">Language Preference</label>
+                            <select id="settingsLanguage">
+                                <option value="en">English</option>
+                                <option value="am">አማርኛ</option>
+                            </select>
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary" onclick="saveSettings()">
+                            <span data-en="Save Changes" data-am="ለውጦችን አስቀምጥ">Save Changes</span>
+                        </button>
+                    </form>
+                    
+                    <hr style="margin: 2rem 0;">
+                    
+                    <h3 data-en="Security" data-am="ደህንነት">Security</h3>
+                    <button class="btn btn-outline" onclick="changePassword()">
+                        <span data-en="Change Password" data-am="የይለፍ ቃል ቀይር">Change Password</span>
+                    </button>
+                    
+                    <hr style="margin: 2rem 0;">
+                    
+                    <h3 data-en="Delete Account" data-am="መለያ ሰርዝ">Delete Account</h3>
+                    <button class="btn btn-outline" style="border-color: var(--secondary); color: var(--secondary);" onclick="deleteAccount()">
+                        <span data-en="Delete My Account" data-am="መለያዬን ሰርዝ">Delete My Account</span>
+                    </button>
+                </div>
+            `;
+        }
+        
+        // ===== ACTIONS =====
+        function editProperty(propertyId) {
+            showNotification(`Editing property ${propertyId}`, 'info');
+        }
+        
+        function deleteProperty(propertyId) {
+            if (confirm('Are you sure you want to delete this property?')) {
+                showNotification(`Property ${propertyId} deleted`, 'success');
+            }
+        }
+        
+        function viewProperty(propertyId) {
+            showNotification(`Viewing property ${propertyId}`, 'info');
+        }
+        
+        function openChat(user) {
+            showNotification(`Opening chat with ${user}`, 'info');
+        }
+        
+        function downloadReceipt() {
+            showNotification('Downloading receipt...', 'info');
+        }
+        
+        function saveSettings() {
+            const name = document.getElementById('settingsName')?.value;
+            const email = document.getElementById('settingsEmail')?.value;
+            const phone = document.getElementById('settingsPhone')?.value;
+            
+            if (currentUser) {
+                currentUser.name = name;
+                currentUser.email = email;
+                currentUser.phone = phone;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showNotification('Settings saved successfully!', 'success');
+                
+                // Update user info
+                loadUserInfo();
+            }
+        }
+        
+        function changePassword() {
+            showNotification('Password change feature coming soon', 'info');
+        }
+        
+        function deleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('session');
+                showNotification('Account deleted', 'info');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            }
+        }
+        
+        function updateChart(chartType, period) {
+            showNotification(`Updating chart for ${period} months`, 'info');
+        }
+        
+        function logout() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('session');
+            showNotification('Logged out successfully', 'info');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        }
+        
+        // ===== MODAL FUNCTIONS =====
+        function openModal(modalName) {
+            const modal = document.getElementById(modalName + 'Modal');
+            if (modal) {
+                modal.style.display = 'block';
+            }
+        }
+        
+        function closeModal(modalName) {
+            const modal = document.getElementById(modalName + 'Modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // ===== NOTIFICATION SYSTEM =====
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            
+            let icon = 'fa-info-circle';
+            if (type === 'success') icon = 'fa-check-circle';
+            if (type === 'warning') icon = 'fa-exclamation-triangle';
+            if (type === 'error') icon = 'fa-times-circle';
+            
+            notification.innerHTML = `
+                <i class="fas ${icon}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+        
+        // ===== LANGUAGE =====
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('language', lang);
+            
+            const elements = document.querySelectorAll('[data-en][data-am]');
+            elements.forEach(element => {
+                if (lang === 'en') {
+                    element.textContent = element.getAttribute('data-en');
+                } else {
+                    element.textContent = element.getAttribute('data-am');
+                }
+            });
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>

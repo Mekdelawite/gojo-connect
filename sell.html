@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell/Post Property - HomeDirect Ethiopia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .sell-header {
+            background: linear-gradient(135deg, #DA121A 0%, #FCD116 100%);
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+        }
+        
+        .sell-container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .form-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--gray);
+        }
+        
+        .form-section h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .form-section h3 i {
+            color: var(--secondary);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .photo-upload-area {
+            border: 2px dashed var(--primary);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 1rem;
+        }
+        
+        .photo-upload-area:hover {
+            background: rgba(30,58,95,0.05);
+        }
+        
+        .photo-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .photo-preview-item {
+            width: 100%;
+            height: 100px;
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .photo-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .photo-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .feature-tags {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        
+        .feature-tag {
+            padding: 0.5rem 1rem;
+            background: var(--light-gray);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .feature-tag.selected {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .price-input {
+            font-size: 1.5rem;
+            padding: 1rem;
+            border: 2px solid var(--primary);
+            border-radius: var(--border-radius);
+            width: 100%;
+        }
+        
+        .verification-required {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .preview-card {
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 3rem;
+        }
+        
+        .success-message i {
+            font-size: 5rem;
+            color: var(--green);
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo" onclick="navigateTo('index')">
+            HomeDirect <span class="amharic">ሆምዳይሬክት</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" data-en="Home" data-am="መነሻ">Home</a>
+            <a href="buy.html" data-en="Buy" data-am="መግዛት">Buy</a>
+            <a href="rent.html" data-en="Rent" data-am="ማከራየት">Rent</a>
+            <a href="sell.html" class="active" data-en="Sell" data-am="መሸጥ">Sell</a>
+            <a href="#" onclick="openModal('login')" data-en="Login" data-am="ግባ">Login</a>
+            <button class="btn btn-primary" onclick="openModal('signup')" data-en="Sign Up" data-am="ተመዝገብ">Sign Up</button>
+        </div>
+        <div class="mobile-menu" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- Sell Header -->
+    <section class="sell-header">
+        <h1 data-en="List Your Property For Free" data-am="ንብረትዎን በነፃ ይለጥፉ">
+            List Your Property For Free
+        </h1>
+        <p data-en="Connect directly with thousands of buyers and tenants"
+           data-am="በሺዎች ከሚቆጠሩ ገዢዎች እና ተከራዮች ጋር በቀጥታ ይገናኙ">
+            Connect directly with thousands of buyers and tenants
+        </p>
+    </section>
+
+    <!-- Sell Form Container -->
+    <div class="sell-container">
+        <!-- Verification Required Banner (shown if not verified) -->
+        <div id="verificationBanner" class="verification-required">
+            <i class="fas fa-shield-alt" style="font-size: 2rem;"></i>
+            <div style="flex: 1;">
+                <strong data-en="Verification Required" data-am="ማረጋገጫ ያስፈልጋል">Verification Required</strong>
+                <p data-en="You need to complete FaydaID verification before listing properties" 
+                   data-am="ንብረት ከመለጠፍዎ በፊት የፋይዳ አይዲ ማረጋገጫ ማጠናቀቅ ያስፈልጋል">
+                    You need to complete FaydaID verification before listing properties
+                </p>
+            </div>
+            <button class="btn btn-primary" onclick="navigateTo('verification')">
+                <span data-en="Verify Now" data-am="አሁን ያረጋግጡ">Verify Now</span>
+            </button>
+        </div>
+
+        <!-- Property Type Selection -->
+        <div class="form-section">
+            <h3><i class="fas fa-tag"></i> <span data-en="Listing Type" data-am="የማስታወቂያ አይነት">Listing Type</span></h3>
+            <div style="display: flex; gap: 2rem;">
+                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                    <input type="radio" name="listingType" value="sale" checked onchange="toggleListingType('sale')">
+                    <span data-en="For Sale" data-am="ለሽያጭ">For Sale</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                    <input type="radio" name="listingType" value="rent" onchange="toggleListingType('rent')">
+                    <span data-en="For Rent" data-am="ለኪራይ">For Rent</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Basic Information -->
+        <div class="form-section">
+            <h3><i class="fas fa-home"></i> <span data-en="Property Details" data-am="የንብረት ዝርዝሮች">Property Details</span></h3>
+            
+            <div class="form-group">
+                <label data-en="Property Title" data-am="የንብረት ርዕስ">Property Title *</label>
+                <input type="text" id="propertyTitle" placeholder="e.g., Modern 3 Bedroom Villa in Bole" required>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label data-en="Property Type" data-am="የንብረት አይነት">Property Type *</label>
+                    <select id="propertyType">
+                        <option value="house">House</option>
+                        <option value="apartment">Apartment</option>
+                        <option value="villa">Villa</option>
+                        <option value="condo">Condo</option>
+                        <option value="land">Land</option>
+                        <option value="commercial">Commercial</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label data-en="Location" data-am="አካባቢ">Location *</label>
+                    <select id="propertyLocation">
+                        <option value="bole">Bole</option>
+                        <option value="kazanchis">Kazanchis</option>
+                        <option value="cmc">CMC</option>
+                        <option value="gerji">Gerji</option>
+                        <option value="sarbet">Sarbet</option>
+                        <option value="megenagna">Megenagna</option>
+                        <option value="piazza">Piazza</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label data-en="Bedrooms" data-am="መኝታ ቤቶች">Bedrooms</label>
+                    <input type="number" id="bedrooms" min="0" value="3">
+                </div>
+                <div class="form-group">
+                    <label data-en="Bathrooms" data-am="መታጠቢያ ቤቶች">Bathrooms</label>
+                    <input type="number" id="bathrooms" min="0" value="2">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label data-en="Area (sq.m)" data-am="ስፋት (ካሬ ሜትር)">Area (sq.m) *</label>
+                    <input type="number" id="area" min="0" value="180">
+                </div>
+                <div class="form-group">
+                    <label data-en="Furnishing" data-am="የቤት እቃ">Furnishing</label>
+                    <select id="furnishing">
+                        <option value="unfurnished">Unfurnished</option>
+                        <option value="semi-furnished">Semi-Furnished</option>
+                        <option value="furnished">Furnished</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Price Section -->
+        <div class="form-section">
+            <h3><i class="fas fa-tag"></i> <span data-en="Pricing" data-am="ዋጋ">Pricing</span></h3>
+            
+            <div class="form-row">
+                <div class="form-group" id="priceSaleGroup">
+                    <label data-en="Price (Birr)" data-am="ዋጋ (ብር)">Price (Birr) *</label>
+                    <input type="number" id="price" class="price-input" placeholder="e.g., 4500000" value="4500000">
+                </div>
+                
+                <div class="form-group" id="priceRentGroup" style="display: none;">
+                    <label data-en="Monthly Rent (Birr)" data-am="ወርሃዊ ኪራይ (ብር)">Monthly Rent (Birr) *</label>
+                    <input type="number" id="rentPrice" class="price-input" placeholder="e.g., 25000">
+                </div>
+                
+                <div class="form-group" id="negotiableGroup">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; margin-top: 2rem;">
+                        <input type="checkbox" id="negotiable">
+                        <span data-en="Price Negotiable" data-am="ዋጋ ሊደራደር ይችላል">Price Negotiable</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- AI Price Predictor -->
+            <div class="preview-card" id="aiPricePredictor">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <i class="fas fa-robot" style="color: var(--primary);"></i>
+                        <strong data-en="AI Price Prediction" data-am="የአይ ዋጋ ትንበያ">AI Price Prediction</strong>
+                    </div>
+                    <span class="badge" data-en="AI POWERED" data-am="በአይ የተጎላበተ">AI POWERED</span>
+                </div>
+                <p style="margin-top: 0.5rem;">
+                    <span data-en="Based on similar properties in this area:" 
+                          data-am="በዚህ አካባቢ ካሉ ተመሳሳይ ንብረቶች በመነሳት፡">
+                        Based on similar properties in this area:
+                    </span>
+                </p>
+                <div style="display: flex; gap: 2rem; margin-top: 0.5rem;">
+                    <div>
+                        <span style="color: var(--text-light);" data-en="Market Range:" data-am="የገበያ ወሰን:">Market Range:</span>
+                        <strong>₿3.8M - ₿5.2M</strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-light);" data-en="Suggested:" data-am="የተጠቆመ:">Suggested:</span>
+                        <strong style="color: var(--green);">₿4.5M</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Photos Section -->
+        <div class="form-section">
+            <h3><i class="fas fa-camera"></i> <span data-en="Property Photos" data-am="የንብረት ፎቶዎች">Property Photos</span></h3>
+            
+            <div class="photo-upload-area" onclick="document.getElementById('propertyPhotos').click()">
+                <input type="file" id="propertyPhotos" accept="image/*" multiple style="display: none;" onchange="handlePropertyPhotos(event)">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--primary);"></i>
+                <h4 data-en="Click to upload photos" data-am="ፎቶዎችን ለመስቀል ይጫኑ">Click to upload photos</h4>
+                <p data-en="Upload up to 10 photos (JPG, PNG) - Max 5MB each"
+                   data-am="እስከ 10 ፎቶዎች ይስቀሉ (JPG, PNG) - ከፍተኛ 5MB እያንዳንዱ">
+                    Upload up to 10 photos (JPG, PNG) - Max 5MB each
+                </p>
+            </div>
+            
+            <div class="photo-preview-grid" id="photoPreview"></div>
+        </div>
+
+        <!-- Features & Amenities -->
+        <div class="form-section">
+            <h3><i class="fas fa-star"></i> <span data-en="Features & Amenities" data-am="መገልገያዎች">Features & Amenities</span></h3>
+            
+            <div class="feature-tags" id="featureTags">
+                <span class="feature-tag" onclick="toggleFeature(this)" data-feature="parking">Parking</span>
+                <span class="feature-tag" onclick="toggleFeature(this)" data-feature="security">24/7 Security</span>
+                <span class="feature-tag" onclick="toggleFeature(this)" data-feature="water">Water Tank</span>
+                <span class="feature-tag" onclick="toggleFeature(this)" data-feature="generator">Generator</span>
+                <span class="feature-tag" onclick="toggleFeature(this)" data-feature="elevator">Elevator</span>
+                <span class="feature-tag" onclick="toggleFeature(this)" data-feature="garden">Garden</span>
+                <span class="feature-tag" onclick="toggleFeature(this)" data-feature="balcony">Balcony</span>
+                <span class="feature-tag" onclick="toggleFeature(this)" data-feature="furnished">Furnished</span>
+                <span class="feature-tag" onclick="toggleFeature(this)" data-feature="wifi">WiFi</span>
+                <span class="feature-tag" onclick="toggleFeature(this)" data-feature="ac">Air Conditioning</span>
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-section">
+            <h3><i class="fas fa-align-left"></i> <span data-en="Description" data-am="ገለጻ">Description</span></h3>
+            
+            <div class="form-group">
+                <textarea id="description" rows="6" placeholder="Describe your property in detail... (e.g., nearby amenities, condition, unique features)"></textarea>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="form-section">
+            <h3><i class="fas fa-phone"></i> <span data-en="Contact Information" data-am="የመገኛ መረጃ">Contact Information</span></h3>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label data-en="Contact Name" data-am="የእውቂያ ስም">Contact Name *</label>
+                    <input type="text" id="contactName" value="John Doe">
+                </div>
+                <div class="form-group">
+                    <label data-en="Phone Number" data-am="ስልክ ቁጥር">Phone Number *</label>
+                    <input type="tel" id="contactPhone" value="+251 911 234 567">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label data-en="Email" data-am="ኢሜይል">Email *</label>
+                <input type="email" id="contactEmail" value="john@example.com">
+            </div>
+            
+            <label style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem;">
+                <input type="checkbox" id="showPhone" checked>
+                <span data-en="Show phone number on listing" data-am="ስልክ ቁጥር በማስታወቂያ ላይ አሳይ">Show phone number on listing</span>
+            </label>
+        </div>
+
+        <!-- Terms and Submit -->
+        <div class="form-section" style="border-bottom: none;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem;">
+                <input type="checkbox" id="acceptTerms">
+                <span data-en="I agree to the Terms of Service and Privacy Policy" 
+                      data-am="የአገልግሎት ውል እና የግላዊነት ፖሊሲ ተቀበላለሁ">
+                    I agree to the Terms of Service and Privacy Policy
+                </span>
+            </label>
+            
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-outline btn-large" onclick="previewListing()">
+                    <i class="fas fa-eye"></i> <span data-en="Preview" data-am="ቅድመ-እይታ">Preview</span>
+                </button>
+                <button class="btn btn-primary btn-large" onclick="submitListing()" id="submitBtn">
+                    <i class="fas fa-cloud-upload-alt"></i> <span data-en="Post Property" data-am="ንብረት ለጥፍ">Post Property</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="listingSuccessModal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <span class="close" onclick="closeModal('listingSuccess')">&times;</span>
+            <div class="success-message">
+                <i class="fas fa-check-circle"></i>
+                <h2 data-en="Property Posted Successfully!" data-am="ንብረት በተሳካ ሁኔታ ተለጥፏል!">
+                    Property Posted Successfully!
+                </h2>
+                <p data-en="Your property is now live and visible to thousands of potential buyers/tenants."
+                   data-am="ንብረትዎ አሁን ለብዙ ሺህ ገዢዎች/ተከራዮች ይታያል።">
+                    Your property is now live and visible to thousands of potential buyers/tenants.
+                </p>
+                <div style="margin: 2rem 0; padding: 1rem; background: var(--light-gray); border-radius: var(--border-radius);">
+                    <p><strong data-en="Listing ID:" data-am="የማስታወቂያ መለያ:">Listing ID:</strong> <span id="listingId">HMD-2026-0001</span></p>
+                    <p><strong data-en="Status:" data-am="ሁኔታ:">Status:</strong> <span style="color: var(--green);">Active</span></p>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <button class="btn btn-outline" onclick="navigateTo('index')">
+                        <span data-en="Back to Home" data-am="ወደ መነሻ ተመለስ">Back to Home</span>
+                    </button>
+                    <button class="btn btn-primary" onclick="navigateTo('dashboard')">
+                        <span data-en="View in Dashboard" data-am="በዳሽቦርድ ይመልከቱ">View in Dashboard</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let uploadedPhotos = [];
+        let selectedFeatures = [];
+        
+        function toggleListingType(type) {
+            const saleGroup = document.getElementById('priceSaleGroup');
+            const rentGroup = document.getElementById('priceRentGroup');
+            
+            if (type === 'sale') {
+                saleGroup.style.display = 'block';
+                rentGroup.style.display = 'none';
+            } else {
+                saleGroup.style.display = 'none';
+                rentGroup.style.display = 'block';
+            }
+            
+            // Update AI price predictor
+            updateAIPricePredictor();
+        }
+        
+        function handlePropertyPhotos(event) {
+            const files = Array.from(event.target.files);
+            if (uploadedPhotos.length + files.length > 10) {
+                showNotification('Maximum 10 photos allowed', 'warning');
+                return;
+            }
+            
+            uploadedPhotos = [...uploadedPhotos, ...files];
+            displayPhotoPreviews();
+        }
+        
+        function displayPhotoPreviews() {
+            const preview = document.getElementById('photoPreview');
+            preview.innerHTML = '';
+            
+            uploadedPhotos.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const item = document.createElement('div');
+                    item.className = 'photo-preview-item';
+                    item.innerHTML = `
+                        <img src="${e.target.result}" alt="Property photo">
+                        <div class="photo-remove" onclick="removePhoto(${index})">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    `;
+                    preview.appendChild(item);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        function removePhoto(index) {
+            uploadedPhotos.splice(index, 1);
+            displayPhotoPreviews();
+        }
+        
+        function toggleFeature(element) {
+            element.classList.toggle('selected');
+            const feature = element.dataset.feature;
+            
+            if (selectedFeatures.includes(feature)) {
+                selectedFeatures = selectedFeatures.filter(f => f !== feature);
+            } else {
+                selectedFeatures.push(feature);
+            }
+        }
+        
+        function updateAIPricePredictor() {
+            const location = document.getElementById('propertyLocation').value;
+            const type = document.getElementById('propertyType').value;
+            const bedrooms = document.getElementById('bedrooms').value;
+            
+            // Simulate AI prediction
+            const predictor = document.getElementById('aiPricePredictor');
+            const listingType = document.querySelector('input[name="listingType"]:checked').value;
+            
+            if (listingType === 'sale') {
+                predictor.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <i class="fas fa-robot" style="color: var(--primary);"></i>
+                            <strong data-en="AI Price Prediction" data-am="የአይ ዋጋ ትንበያ">AI Price Prediction</strong>
+                        </div>
+                        <span class="badge" data-en="AI POWERED" data-am="በአይ የተጎላበተ">AI POWERED</span>
+                    </div>
+                    <p style="margin-top: 0.5rem;">
+                        <span data-en="Based on similar properties in ${location}:" 
+                              data-am="በ${location} ካሉ ተመሳሳይ ንብረቶች በመነሳት፡">
+                            Based on similar properties in ${location}:
+                        </span>
+                    </p>
+                    <div style="display: flex; gap: 2rem; margin-top: 0.5rem;">
+                        <div>
+                            <span style="color: var(--text-light);" data-en="Market Range:" data-am="የገበያ ወሰን:">Market Range:</span>
+                            <strong>₿${(Math.random() * 2 + 3).toFixed(1)}M - ₿${(Math.random() * 2 + 4).toFixed(1)}M</strong>
+                        </div>
+                        <div>
+                            <span style="color: var(--text-light);" data-en="Suggested:" data-am="የተጠቆመ:">Suggested:</span>
+                            <strong style="color: var(--green);">₿${(Math.random() * 1 + 4).toFixed(1)}M</strong>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        function previewListing() {
+            const title = document.getElementById('propertyTitle').value || 'Untitled Property';
+            showNotification('Generating preview...', 'info');
+            
+            setTimeout(() => {
+                // Create preview modal
+                const previewHtml = `
+                    <div class="modal-content" style="max-width: 600px;">
+                        <span class="close" onclick="closeModal('preview')">&times;</span>
+                        <h2>Listing Preview</h2>
+                        <div style="margin: 1rem 0;">
+                            <h3>${title}</h3>
+                            <p>Location: ${document.getElementById('propertyLocation').value}</p>
+                            <p>Price: ₿${document.querySelector('input[name="listingType"]:checked').value === 'sale' ? 
+                                document.getElementById('price').value : document.getElementById('rentPrice').value}</p>
+                            <p>Bedrooms: ${document.getElementById('bedrooms').value}</p>
+                            <p>Features: ${selectedFeatures.join(', ') || 'None selected'}</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="closeModal('preview')">Close Preview</button>
+                    </div>
+                `;
+                
+                const previewModal = document.createElement('div');
+                previewModal.id = 'previewModal';
+                previewModal.className = 'modal';
+                previewModal.innerHTML = previewHtml;
+                document.body.appendChild(previewModal);
+                previewModal.style.display = 'block';
+            }, 1000);
+        }
+        
+        function submitListing() {
+            // Check verification
+            if (!currentUser || !currentUser.verified) {
+                showNotification('Please complete FaydaID verification first', 'warning');
+                navigateTo('verification');
+                return;
+            }
+            
+            // Check terms
+            if (!document.getElementById('acceptTerms').checked) {
+                showNotification('Please accept the terms and conditions', 'warning');
+                return;
+            }
+            
+            // Validate required fields
+            const title = document.getElementById('propertyTitle').value;
+            if (!title) {
+                showNotification('Please enter property title', 'error');
+                return;
+            }
+            
+            showNotification('Posting your property...', 'info');
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Generate listing ID
+                const listingId = 'HMD-' + new Date().getFullYear() + '-' + 
+                                 String(Math.floor(Math.random() * 10000)).padStart(4, '0');
+                document.getElementById('listingId').textContent = listingId;
+                
+                // Save to user's properties
+                const userProperties = JSON.parse(localStorage.getItem('userProperties') || '[]');
+                userProperties.push({
+                    id: listingId,
+                    title: title,
+                    type: document.querySelector('input[name="listingType"]:checked').value,
+                    price: document.querySelector('input[name="listingType"]:checked').value === 'sale' ? 
+                           document.getElementById('price').value : document.getElementById('rentPrice').value,
+                    location: document.getElementById('propertyLocation').value,
+                    bedrooms: document.getElementById('bedrooms').value,
+                    bathrooms: document.getElementById('bathrooms').value,
+                    area: document.getElementById('area').value,
+                    features: selectedFeatures,
+                    photos: uploadedPhotos.length,
+                    status: 'active',
+                    postedDate: new Date().toISOString()
+                });
+                localStorage.setItem('userProperties', JSON.stringify(userProperties));
+                
+                // Show success modal
+                openModal('listingSuccess');
+                
+                // Track event
+                analytics.trackEvent('property_posted', {
+                    listingId: listingId,
+                    type: document.querySelector('input[name="listingType"]:checked').value
+                });
+            }, 2000);
+        }
+        
+        // Check verification status on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const banner = document.getElementById('verificationBanner');
+            if (currentUser && currentUser.verified) {
+                banner.style.display = 'none';
+            }
+            
+            // Add location change listener for AI predictor
+            document.getElementById('propertyLocation').addEventListener('change', updateAIPricePredictor);
+            document.getElementById('propertyType').addEventListener('change', updateAIPricePredictor);
+            document.getElementById('bedrooms').addEventListener('change', updateAIPricePredictor);
+        });
+    </script>
+
+    <script src="js/language.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

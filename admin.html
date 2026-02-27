@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - HomeDirect Ethiopia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .admin-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+        
+        .admin-sidebar {
+            background: #1a1a1a;
+            color: white;
+            padding: 2rem 0;
+        }
+        
+        .admin-logo {
+            padding: 0 1.5rem 2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-bottom: 1px solid #333;
+        }
+        
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: #999;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .admin-nav-item:hover,
+        .admin-nav-item.active {
+            background: #333;
+            color: white;
+        }
+        
+        .admin-main {
+            background: #f5f5f5;
+            padding: 2rem;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .admin-stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .admin-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .admin-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+        
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .admin-table th {
+            text-align: left;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .admin-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .admin-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .action-button {
+            padding: 0.3rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 0.2rem;
+        }
+        
+        .btn-approve {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-reject {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-input {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <div class="admin-logo">HomeDirect Admin</div>
+            
+            <div class="admin-nav-item active" onclick="loadAdminTab('dashboard')">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="admin-nav-item" onclick="loadAdminTab('users')">
+                <i class="fas fa-users"></i>
+                <span>Users</span>
+            </div>
+                    <div class="admin-nav-item" onclick="loadAdminTab('properties')">
+                <i class="fas fa-home"></i>
+                <span>Properties</span>
+            </div>
+            <div class="admin-nav-item" onclick="loadAdminTab('verifications')">
+                <i class="fas fa-id-card"></i>
+                <span>Verifications</span>
+            </div>
+            <div class="admin-nav-item" onclick="loadAdminTab('payments')">
+                <i class="fas fa-credit-card"></i>
+                <span>Payments</span>
+            </div>
+            <div class="admin-nav-item" onclick="loadAdminTab('disputes')">
+                <i class="fas fa-gavel"></i>
+                <span>Disputes</span>
+            </div>
+            <div class="admin-nav-item" onclick="loadAdminTab('reports')">
+                <i class="fas fa-flag"></i>
+                <span>Reports</span>
+            </div>
+            <div class="admin-nav-item" onclick="loadAdminTab('analytics')">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </div>
+            <div class="admin-nav-item" onclick="loadAdminTab('settings')">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </div>
+            <div class="admin-nav-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="admin-main" id="adminMain">
+            <div class="admin-header">
+                <h1 id="adminTitle">Dashboard</h1>
+                <div>
+                    <span id="adminDate"></span>
+                    <button class="btn btn-outline" onclick="refreshData()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="admin-stats" id="adminStats">
+                <div class="admin-stat-card">
+                    <div class="admin-stat-value" id="totalUsers">3,456</div>
+                    <div>Total Users</div>
+                    <small>↑ 12% from last month</small>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-value" id="totalProperties">5,234</div>
+                    <div>Total Properties</div>
+                    <small>↑ 8% from last month</small>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-value" id="pendingVerifications">23</div>
+                    <div>Pending Verifications</div>
+                    <small>↓ 5 from yesterday</small>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-value" id="totalRevenue">₿12.5M</div>
+                    <div>Total Revenue</div>
+                    <small>↑ 15% from last month</small>
+                </div>
+            </div>
+
+            <!-- Dynamic Content -->
+            <div id="adminContent">
+                <!-- Users Table -->
+                <div class="admin-section">
+                    <h3>Recent Users</h3>
+                    <div class="filter-bar">
+                        <input type="text" class="filter-input" placeholder="Search users..." id="userSearch">
+                        <select class="filter-input" id="userFilter">
+                            <option value="all">All Users</option>
+                            <option value="verified">Verified</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>
+                    <table class="admin-table" id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Status</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>USR001</td>
+                                <td>Abebe Kebede</td>
+                                <td>abebe@email.com</td>
+                                <td>+251 911 111 111</td>
+                                <td><span class="status-badge status-approved">Verified</span></td>
+                                <td>2026-01-15</td>
+                                <td>
+                                    <button class="action-button btn-approve" onclick="viewUser('USR001')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-button btn-reject" onclick="suspendUser('USR001')">
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>USR002</td>
+                                <td>Tigist Haile</td>
+                                <td>tigist@email.com</td>
+                                <td>+251 922 222 222</td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td>2026-02-20</td>
+                                <td>
+                                    <button class="action-button btn-approve" onclick="verifyUser('USR002')">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="action-button btn-reject" onclick="rejectUser('USR002')">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pending Verifications -->
+                <div class="admin-section">
+                    <h3>Pending Verifications</h3>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>ID Type</th>
+                                <th>Submitted</th>
+                                <th>Documents</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pendingVerificationsTable">
+                            <tr>
+                                <td>Tigist Haile</td>
+                                <td>FaydaID</td>
+                                <td>2026-02-26</td>
+                                <td>
+                                    <button class="action-button" onclick="viewDocument('user002')">
+                                        <i class="fas fa-file-image"></i> View
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="action-button btn-approve" onclick="approveVerification('USR002')">
+                                        Approve
+                                    </button>
+                                    <button class="action-button btn-reject" onclick="rejectVerification('USR002')">
+                                        Reject
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Recent Properties -->
+                <div class="admin-section">
+                    <h3>Recent Properties</h3>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Owner</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Posted</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>PROP001</td>
+                                <td>Modern Villa in Bole</td>
+                                <td>Alemitu T.</td>
+                                <td>₿4.5M</td>
+                                <td><span class="status-badge status-approved">Active</span></td>
+                                <td>2026-02-25</td>
+                                <td>
+                                    <button class="action-button" onclick="viewProperty('PROP001')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-button btn-reject" onclick="hideProperty('PROP001')">
+                                        <i class="fas fa-eye-slash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Recent Payments -->
+                <div class="admin-section">
+                    <h3>Recent Transactions</h3>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>User</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>TXN123456</td>
+                                <td>Henok T.</td>
+                                <td>₿4,500,000</td>
+                                <td>TeleBirr</td>
+                                <td><span class="status-badge status-approved">Completed</span></td>
+                                <td>2026-02-27</td>
+                                <td>
+                                    <button class="action-button" onclick="viewReceipt('TXN123456')">
+                                        <i class="fas fa-receipt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Details Modal -->
+    <div id="userDetailsModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close" onclick="closeModal('userDetails')">&times;</span>
+            <h2>User Details</h2>
+            <div id="userDetailsContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentAdminTab = 'dashboard';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if admin
+            if (!currentUser || currentUser.email !== 'admin@homedirect.et') {
+                showNotification('Unauthorized access', 'error');
+                navigateTo('index');
+                return;
+            }
+            
+            updateAdminDate();
+            loadAdminData();
+        });
+        
+        function updateAdminDate() {
+            document.getElementById('adminDate').textContent = new Date().toLocaleString();
+        }
+        
+        function loadAdminData() {
+            // Load stats
+            loadAdminStats();
+            
+            // Load tables
+            loadUsersTable();
+            loadVerificationsTable();
+            loadPropertiesTable();
+            loadPaymentsTable();
+        }
+        
+        function loadAdminStats() {
+            // Update stats with animation
+            animateValue('totalUsers', 3456, 3500);
+            animateValue('totalProperties', 5234, 5300);
+            animateValue('pendingVerifications', 23, 20);
+            animateValue('totalRevenue', 12.5, 13.2, 'M');
+        }
+        
+        function animateValue(elementId, start, end, suffix = '') {
+            const element = document.getElementById(elementId);
+            let current = start;
+            const increment = (end - start) / 20;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= end) {
+                    clearInterval(timer);
+                    current = end;
+                }
+                element.textContent = current.toFixed(1) + suffix;
+            }, 50);
+        }
+        
+        function loadUsersTable() {
+            const users = [
+                { id: 'USR001', name: 'Abebe Kebede', email: 'abebe@email.com', phone: '+251911111111', status: 'verified', joined: '2026-01-15' },
+                { id: 'USR002', name: 'Tigist Haile', email: 'tigist@email.com', phone: '+251922222222', status: 'pending', joined: '2026-02-20' },
+                { id: 'USR003', name: 'Biruk Demeke', email: 'biruk@email.com', phone: '+251933333333', status: 'verified', joined: '2026-02-01' },
+                { id: 'USR004', name: 'Meron Girma', email: 'meron@email.com', phone: '+251944444444', status: 'suspended', joined: '2026-01-28' }
+            ];
+            
+            const tbody = document.querySelector('#usersTable tbody');
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.phone}</td>
+                    <td><span class="status-badge status-${user.status}">${user.status}</span></td>
+                    <td>${user.joined}</td>
+                    <td>
+                        <button class="action-button btn-approve" onclick="viewUser('${user.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        ${user.status === 'pending' ? 
+                            `<button class="action-button btn-approve" onclick="verifyUser('${user.id}')">
+                                <i class="fas fa-check"></i>
+                            </button>` : 
+                            `<button class="action-button btn-reject" onclick="suspendUser('${user.id}')">
+                                <i class="fas fa-ban"></i>
+                            </button>`
+                        }
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function loadVerificationsTable() {
+            const verifications = [
+                { user: 'Tigist Haile', type: 'FaydaID', submitted: '2026-02-26', docs: ['id_front.jpg', 'id_back.jpg'] },
+                { user: 'Solomon A.', type: 'Passport', submitted: '2026-02-25', docs: ['passport.jpg'] }
+            ];
+            
+            const tbody = document.getElementById('pendingVerificationsTable');
+            tbody.innerHTML = verifications.map(ver => `
+                <tr>
+                    <td>${ver.user}</td>
+                    <td>${ver.type}</td>
+                    <td>${ver.submitted}</td>
+                    <td>
+                        <button class="action-button" onclick="viewDocuments('${ver.user}')">
+                            <i class="fas fa-file-image"></i> View (${ver.docs.length})
+                        </button>
+                    </td>
+                    <td>
+                        <button class="action-button btn-approve" onclick="approveVerification('${ver.user}')">
+                            Approve
+                        </button>
+                        <button class="action-button btn-reject" onclick="rejectVerification('${ver.user}')">
+                            Reject
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function loadAdminTab(tab) {
+            currentAdminTab = tab;
+            
+            // Update active nav
+            document.querySelectorAll('.admin-nav-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            // Update title
+            const titles = {
+                'dashboard': 'Dashboard',
+                'users': 'User Management',
+                'properties': 'Property Management',
+                'verifications': 'Verification Requests',
+                'payments': 'Payment Transactions',
+                'disputes': 'Dispute Resolution',
+                'reports': 'Reports & Flags',
+                'analytics': 'Analytics',
+                'settings': 'System Settings'
+            };
+            document.getElementById('adminTitle').textContent = titles[tab];
+            
+            // Load tab content
+            switch(tab) {
+                case 'users':
+                    loadUserManagement();
+                    break;
+                case 'properties':
+                    loadPropertyManagement();
+                    break;
+                case 'verifications':
+                    loadVerificationManagement();
+                    break;
+                case 'payments':
+                    loadPaymentManagement();
+                    break;
+                case 'disputes':
+                    loadDisputeManagement();
+                    break;
+                case 'reports':
+                    loadReportManagement();
+                    break;
+                case 'analytics':
+                    loadAnalyticsDashboard();
+                    break;
+                case 'settings':
+                    loadSystemSettings();
+                    break;
+                default:
+                    location.reload();
+            }
+        }
+        
+        function loadUserManagement() {
+            const content = document.getElementById('adminContent');
+            content.innerHTML = `
+                <div class="admin-section">
+                    <h3>User Management</h3>
+                    <div class="filter-bar">
+                        <input type="text" class="filter-input" placeholder="Search users...">
+                        <select class="filter-input">
+                            <option>All Users</option>
+                            <option>Verified</option>
+                            <option>Pending</option>
+                            <option>Suspended</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="exportUsers()">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Status</th>
+                                <th>Verified</th>
+                                <th>Joined</th>
+                                <th>Properties</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>USR001</td>
+                                <td>Abebe Kebede</td>
+                                <td>abebe@email.com</td>
+                                <td>+251911111111</td>
+                                <td><span class="status-badge status-approved">Active</span></td>
+                                <td><i class="fas fa-check" style="color: green;"></i></td>
+                                <td>2026-01-15</td>
+                                <td>3</td>
+                                <td>
+                                    <button class="action-button" onclick="editUser('USR001')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-button btn-reject" onclick="suspendUser('USR001')">
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+        
+        function loadPropertyManagement() {
+            const content = document.getElementById('adminContent');
+            content.innerHTML = `
+                <div class="admin-section">
+                    <h3>Property Management</h3>
+                    <div class="filter-bar">
+                        <input type="text" class="filter-input" placeholder="Search properties...">
+                        <select class="filter-input">
+                            <option>All Properties</option>
+                            <option>For Sale</option>
+                            <option>For Rent</option>
+                            <option>Pending Review</option>
+                            <option>Reported</option>
+                        </select>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Owner</th>
+                                <th>Type</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Views</th>
+                                <th>Posted</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>PROP001</td>
+                                <td>Modern Villa in Bole</td>
+                                <td>Alemitu T.</td>
+                                <td>Sale</td>
+                                <td>₿4.5M</td>
+                                <td><span class="status-badge status-approved">Active</span></td>
+                                <td>234</td>
+                                <td>2026-02-25</td>
+                                <td>
+                                    <button class="action-button" onclick="viewProperty('PROP001')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-button" onclick="featureProperty('PROP001')">
+                                        <i class="fas fa-star"></i>
+                                    </button>
+                                    <button class="action-button btn-reject" onclick="hideProperty('PROP001')">
+                                        <i class="fas fa-eye-slash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+        
+        function loadVerificationManagement() {
+            const content = document.getElementById('adminContent');
+            content.innerHTML = `
+                <div class="admin-section">
+                    <h3>Verification Requests</h3>
+                    <div class="filter-bar">
+                        <input type="text" class="filter-input" placeholder="Search...">
+                        <select class="filter-input">
+                            <option>All Requests</option>
+                            <option>FaydaID</option>
+                            <option>Passport</option>
+                            <option>Driver's License</option>
+                        </select>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>ID Type</th>
+                                <th>ID Number</th>
+                                <th>Submitted</th>
+                                <th>Documents</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tigist Haile</td>
+                                <td>FaydaID</td>
+                                <td>FD12345678</td>
+                                <td>2026-02-26</td>
+                                <td>
+                                    <button class="action-button" onclick="viewDocument('tigist_id')">
+                                        <i class="fas fa-file-image"></i> Front
+                                    </button>
+                                    <button class="action-button" onclick="viewDocument('tigist_id_back')">
+                                        <i class="fas fa-file-image"></i> Back
+                                    </button>
+                                </td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td>
+                                    <button class="action-button btn-approve" onclick="approveVerification('Tigist')">
+                                        <i class="fas fa-check"></i> Approve
+                                    </button>
+                                    <button class="action-button btn-reject" onclick="rejectVerification('Tigist')">
+                                        <i class="fas fa-times"></i> Reject
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+        
+        function loadPaymentManagement() {
+            const content = document.getElementById('adminContent');
+            content.innerHTML = `
+                <div class="admin-section">
+                    <h3>Payment Transactions</h3>
+                    <div class="stats-grid" style="grid-template-columns: repeat(3,1fr); margin-bottom: 2rem;">
+                        <div class="stat-card">
+                            <h4>Today's Volume</h4>
+                            <div class="admin-stat-value">₿245,000</div>
+                        </div>
+                        <div class="stat-card">
+                            <h4>This Week</h4>
+                            <div class="admin-stat-value">₿1.2M</div>
+                        </div>
+                        <div class="stat-card">
+                            <h4>This Month</h4>
+                            <div class="admin-stat-value">₿4.5M</div>
+                        </div>
+                    </div>
+                    
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>User</th>
+                                <th>Property</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>TXN123456</td>
+                                <td>Henok T.</td>
+                                <td>Villa in Bole</td>
+                                <td>₿4,500,000</td>
+                                <td>TeleBirr</td>
+                                <td><span class="status-badge status-approved">Completed</span></td>
+                                <td>2026-02-27</td>
+                                <td>
+                                    <button class="action-button" onclick="viewReceipt('TXN123456')">
+                                        <i class="fas fa-receipt"></i>
+                                    </button>
+                                    <button class="action-button" onclick="refundPayment('TXN123456')">
+                                        <i class="fas fa-undo"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+        
+        function loadDisputeManagement() {
+            const content = document.getElementById('adminContent');
+            content.innerHTML = `
+                <div class="admin-section">
+                    <h3>Dispute Resolution</h3>
+                    <div class="stats-grid" style="grid-template-columns: repeat(2,1fr);">
+                        <div class="stat-card">
+                            <h4>Open Disputes</h4>
+                            <div class="admin-stat-value">5</div>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Resolved</h4>
+                            <div class="admin-stat-value">12</div>
+                        </div>
+                    </div>
+                    
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Case ID</th>
+                                <th>Property</th>
+                                <th>Buyer</th>
+                                <th>Seller</th>
+                                <th>Issue</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>DSP001</td>
+                                <td>Apartment in Kazanchis</td>
+                                <td>Biruk D.</td>
+                                <td>Azeb D.</td>
+                                <td>Security deposit return</td>
+                                <td>₿25,000</td>
+                                <td><span class="status-badge status-pending">Open</span></td>
+                                <td>
+                                    <button class="action-button" onclick="viewDispute('DSP001')">
+                                        View Case
+                                    </button>
+                                    <button class="action-button btn-approve" onclick="resolveDispute('DSP001')">
+                                        Resolve
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+        
+        function loadReportManagement() {
+            const content = document.getElementById('adminContent');
+            content.innerHTML = `
+                <div class="admin-section">
+                    <h3>Reported Content</h3>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Report ID</th>
+                                <th>Reported By</th>
+                                <th>Content Type</th>
+                                <th>Reason</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>RPT001</td>
+                                <td>User123</td>
+                                <td>Property</td>
+                                <td>Fake photos</td>
+                                <td>2026-02-27</td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td>
+                                    <button class="action-button" onclick="viewReport('RPT001')">
+                                        View
+                                    </button>
+                                    <button class="action-button btn-approve" onclick="dismissReport('RPT001')">
+                                        Dismiss
+                                    </button>
+                                    <button class="action-button btn-reject" onclick="takeAction('RPT001')">
+                                        Take Action
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+        
+        function loadAnalyticsDashboard() {
+            const content = document.getElementById('adminContent');
+            content.innerHTML = `
+                <div class="admin-section">
+                    <h3>Platform Analytics</h3>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                        <div>
+                            <canvas id="userGrowthChart" style="width:100%; height:300px;"></canvas>
+                        </div>
+                        <div>
+                            <h4>Key Metrics</h4>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="padding: 1rem; border-bottom: 1px solid #eee;">
+                                    <strong>User Growth:</strong> +15% this month
+                                </li>
+                                <li style="padding: 1rem; border-bottom: 1px solid #eee;">
+                                    <strong>Property Listings:</strong> +8% this month
+                                </li>
+                                <li style="padding: 1rem; border-bottom: 1px solid #eee;">
+                                    <strong>Conversion Rate:</strong> 12.5%
+                                </li>
+                                <li style="padding: 1rem; border-bottom: 1px solid #eee;">
+                                    <strong>Average Time on Site:</strong> 4m 30s
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="admin-section">
+                    <h3>Geographic Distribution</h3>
+                    <div style="height: 300px; background: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                        <p>Map view of property distribution across Addis Ababa</p>
+                    </div>
+                </div>
+            `;
+            
+            // Initialize chart
+            setTimeout(() => {
+                const ctx = document.getElementById('userGrowthChart')?.getContext('2d');
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                            datasets: [{
+                                label: 'User Growth',
+                                data: [1200, 1900, 2300, 2800, 3200, 3500],
+                                borderColor: 'var(--primary)',
+                                tension: 0.1
+                            }]
+                        }
+                    });
+                }
+            }, 100);
+        }
+        
+        function loadSystemSettings() {
+            const content = document.getElementById('adminContent');
+            content.innerHTML = `
+                <div class="admin-section">
+                    <h3>System Settings</h3>
+                    <form style="max-width: 600px;">
+                        <div class="form-group">
+                            <label>Platform Name</label>
+                            <input type="text" value="HomeDirect Ethiopia" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Support Email</label>
+                            <input type="email" value="support@homedirect.et" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Support Phone</label>
+                            <input type="tel" value="+251 911 234 567" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Commission Rate (%)</label>
+                            <input type="number" value="0" class="form-control" disabled>
+                            <small>Commission-free platform</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Verification Requirements</label>
+                            <select class="form-control" multiple>
+                                <option selected>FaydaID</option>
+                                <option selected>Passport</option>
+                                <option selected>Driver's License</option>
+                                <option>Voter ID</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Maintenance Mode</label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox"> Enable maintenance mode
+                            </label>
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary" onclick="saveSettings()">
+                            Save Changes
+                        </button>
+                    </form>
+                </div>
+            `;
+        }
+        
+        // Admin Actions
+        function viewUser(userId) {
+            openModal('userDetails');
+            document.getElementById('userDetailsContent').innerHTML = `
+                <p><strong>User ID:</strong> ${userId}</p>
+                <p><strong>Name:</strong> Abebe Kebede</p>
+                <p><strong>Email:</strong> abebe@email.com</p>
+                <p><strong>Phone:</strong> +251 911 111 111</p>
+                <p><strong>Status:</strong> Verified</p>
+                <p><strong>Joined:</strong> 2026-01-15</p>
+                <p><strong>Properties:</strong> 3</p>
+                <p><strong>Verification:</strong> FaydaID Verified</p>
+            `;
+        }
+        
+        function verifyUser(userId) {
+            showNotification(`User ${userId} verified successfully`, 'success');
+            loadUsersTable();
+        }
+        
+        function rejectUser(userId) {
+            showNotification(`User ${userId} rejected`, 'warning');
+            loadUsersTable();
+        }
+        
+        function suspendUser(userId) {
+            if (confirm(`Suspend user ${userId}?`)) {
+                showNotification(`User ${userId} suspended`, 'warning');
+            }
+        }
+        
+        function approveVerification(userName) {
+            showNotification(`${userName}'s verification approved`, 'success');
+            loadVerificationsTable();
+        }
+        
+        function rejectVerification(userName) {
+            if (confirm(`Reject ${userName}'s verification?`)) {
+                showNotification(`${userName}'s verification rejected`, 'warning');
+            }
+        }
+        
+        function viewDocument(docId) {
+            showNotification(`Opening document...`, 'info');
+        }
+        
+        function hideProperty(propId) {
+            showNotification(`Property ${propId} hidden from listings`, 'info');
+        }
+        
+        function featureProperty(propId) {
+            showNotification(`Property ${propId} marked as featured`, 'success');
+        }
+        
+        function viewReceipt(txnId) {
+            showNotification(`Receipt for ${txnId}`, 'info');
+        }
+        
+        function refundPayment(txnId) {
+            if (confirm(`Refund transaction ${txnId}?`)) {
+                showNotification(`Refund initiated for ${txnId}`, 'warning');
+            }
+        }
+        
+        function exportUsers() {
+            showNotification('Exporting user data...', 'info');
+            setTimeout(() => {
+                showNotification('Export complete! File downloaded.', 'success');
+            }, 2000);
+        }
+        
+        function refreshData() {
+            showNotification('Refreshing data...', 'info');
+            setTimeout(() => {
+                loadAdminData();
+                showNotification('Data refreshed!', 'success');
+            }, 1000);
+        }
+        
+        function saveSettings() {
+            showNotification('Settings saved successfully!', 'success');
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/language.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

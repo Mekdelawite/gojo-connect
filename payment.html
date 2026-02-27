@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - HomeDirect Ethiopia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .payment-container {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 2rem;
+        }
+        
+        .payment-summary {
+            background: white;
+            border-radius: var(--border-radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            height: fit-content;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray);
+        }
+        
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .payment-methods {
+            background: white;
+            border-radius: var(--border-radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .method-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--gray);
+            padding-bottom: 1rem;
+        }
+        
+        .method-tab {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-light);
+            position: relative;
+        }
+        
+        .method-tab.active {
+            color: var(--primary);
+        }
+        
+        .method-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+        
+        .method-content {
+            display: none;
+        }
+        
+        .method-content.active {
+            display: block;
+        }
+        
+        .mobile-money-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .mobile-money-card {
+            padding: 1.5rem;
+            border: 1px solid var(--gray);
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .mobile-money-card:hover,
+        .mobile-money-card.selected {
+            border-color: var(--primary);
+            background: rgba(30,58,95,0.05);
+        }
+        
+        .mobile-money-card i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .bank-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin: 2rem 0;
+        }
+        
+        .bank-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--gray);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .bank-item:hover,
+        .bank-item.selected {
+            border-color: var(--primary);
+            background: rgba(30,58,95,0.05);
+        }
+        
+        .bank-item i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .card-form {
+            margin: 2rem 0;
+        }
+        
+        .card-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+        }
+        
+        .payment-button {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin-top: 2rem;
+        }
+        
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .security-badge i {
+            color: var(--green);
+        }
+        
+        .qr-code {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .qr-code img {
+            width: 200px;
+            height: 200px;
+            background: var(--light-gray);
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo" onclick="navigateTo('index')">
+            HomeDirect <span class="amharic">ሆምዳይሬክት</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" data-en="Home" data-am="መነሻ">Home</a>
+            <a href="buy.html" data-en="Buy" data-am="መግዛት">Buy</a>
+            <a href="rent.html" data-en="Rent" data-am="ማከራየት">Rent</a>
+            <a href="sell.html" data-en="Sell" data-am="መሸጥ">Sell</a>
+            <a href="#" onclick="openModal('login')" data-en="Login" data-am="ግባ">Login</a>
+            <button class="btn btn-primary" onclick="openModal('signup')" data-en="Sign Up" data-am="ተመዝገብ">Sign Up</button>
+        </div>
+        <div class="mobile-menu" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- Payment Container -->
+    <div class="payment-container">
+        <!-- Payment Summary -->
+        <div class="payment-summary">
+            <h2 style="margin-bottom: 1.5rem;" data-en="Payment Summary" data-am="የክፍያ ማጠቃለያ">
+                Payment Summary
+            </h2>
+            
+            <div class="summary-item">
+                <span data-en="Property Price" data-am="የንብረት ዋጋ">Property Price</span>
+                <span>₿4,500,000</span>
+            </div>
+            
+            <div class="summary-item">
+                <span data-en="Service Fee" data-am="የአገልግሎት ክፍያ">Service Fee</span>
+                <span>₿0 <small style="color: var(--green);">(Free)</small></span>
+            </div>
+            
+            <div class="summary-item">
+                <span data-en="Tax" data-am="ግብር">Tax</span>
+                <span>₿0</span>
+            </div>
+            
+            <div class="summary-total">
+                <span data-en="Total" data-am="ጠቅላላ">Total</span>
+                <span>₿4,500,000</span>
+            </div>
+            
+            <div style="margin-top: 2rem; padding: 1rem; background: var(--light-gray); border-radius: var(--border-radius);">
+                <p style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-shield-alt" style="color: var(--green);"></i>
+                    <span data-en="Your payment is protected by escrow service" 
+                          data-am="ክፍያዎ በኤስክሮው አገልግሎት የተጠበቀ ነው">
+                        Your payment is protected by escrow service
+                    </span>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Payment Methods -->
+        <div class="payment-methods">
+            <h2 style="margin-bottom: 1.5rem;" data-en="Select Payment Method" data-am="የክፍያ ዘዴ ይምረጡ">
+                Select Payment Method
+            </h2>
+            
+            <!-- Method Tabs -->
+            <div class="method-tabs">
+                <button class="method-tab active" onclick="switchPaymentTab('mobile')">
+                    <i class="fas fa-mobile-alt"></i> <span data-en="Mobile Money" data-am="የሞባይል ገንዘብ">Mobile Money</span>
+                </button>
+                <button class="method-tab" onclick="switchPaymentTab('bank')">
+                    <i class="fas fa-university"></i> <span data-en="Bank Transfer" data-am="የባንክ ዝውውር">Bank Transfer</span>
+                </button>
+                <button class="method-tab" onclick="switchPaymentTab('card')">
+                    <i class="fas fa-credit-card"></i> <span data-en="Card" data-am="ካርድ">Card</span>
+                </button>
+                <button class="method-tab" onclick="switchPaymentTab('qr')">
+                    <i class="fas fa-qrcode"></i> <span data-en="QR Code" data-am="QR ኮድ">QR Code</span>
+                </button>
+            </div>
+            
+            <!-- Mobile Money Content -->
+            <div class="method-content active" id="mobileMoney">
+                <div class="mobile-money-grid">
+                    <div class="mobile-money-card" onclick="selectPaymentMethod('teleBirr')">
+                        <i class="fas fa-wifi"></i>
+                        <h4>TeleBirr</h4>
+                    </div>
+                    <div class="mobile-money-card" onclick="selectPaymentMethod('mBirr')">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h4>M-Birr</h4>
+                    </div>
+                    <div class="mobile-money-card" onclick="selectPaymentMethod('helloCash')">
+                        <i class="fas fa-bolt"></i>
+                        <h4>HelloCash</h4>
+                    </div>
+                    <div class="mobile-money-card" onclick="selectPaymentMethod('amole')">
+                        <i class="fas fa-wallet"></i>
+                        <h4>Amole</h4>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label data-en="Mobile Money Number" data-am="የሞባይል ገንዘብ ቁጥር">Mobile Money Number</label>
+                    <input type="tel" placeholder="+251 91 234 5678" id="mobileNumber">
+                </div>
+                
+                <button class="btn btn-primary payment-button" onclick="processPayment('mobile')">
+                    <span data-en="Pay with Mobile Money" data-am="በሞባይል ገንዘብ ይክፈሉ">Pay with Mobile Money</span>
+                </button>
+            </div>
+            
+            <!-- Bank Transfer Content -->
+            <div class="method-content" id="bankTransfer">
+                <div class="bank-list">
+                    <div class="bank-item" onclick="selectBank('cbe')">
+                        <i class="fas fa-university"></i>
+                        <div>
+                            <h4>Commercial Bank of Ethiopia (CBE)</h4>
+                            <p style="color: var(--text-light);">Account: 1000001234567</p>
+                        </div>
+                    </div>
+                    <div class="bank-item" onclick="selectBank('dashen')">
+                        <i class="fas fa-university"></i>
+                        <div>
+                            <h4>Dashen Bank</h4>
+                            <p style="color: var(--text-light);">Account: 1234567890123</p>
+                        </div>
+                    </div>
+                    <div class="bank-item" onclick="selectBank('awash')">
+                        <i class="fas fa-university"></i>
+                        <div>
+                            <h4>Awash Bank</h4>
+                            <p style="color: var(--text-light);">Account: 1234567890</p>
+                        </div>
+                    </div>
+                    <div class="bank-item" onclick="selectBank('abyssinia')">
+                        <i class="fas fa-university"></i>
+                        <div>
+                            <h4>Abyssinia Bank</h4>
+                            <p style="color: var(--text-light);">Account: 123456789</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label data-en="Transfer Reference" data-am="የዝውውር ማጣቀሻ">Transfer Reference</label>
+                    <input type="text" placeholder="Enter transaction ID" id="transferRef">
+                </div>
+                
+                <button class="btn btn-primary payment-button" onclick="processPayment('bank')">
+                    <span data-en="Confirm Bank Transfer" data-am="የባንክ ዝውውር አረጋግጥ">Confirm Bank Transfer</span>
+                </button>
+            </div>
+            
+            <!-- Card Payment Content -->
+            <div class="method-content" id="cardPayment">
+                <div class="card-form">
+                    <div class="form-group">
+                        <label data-en="Card Number" data-am="ካርድ ቁጥር">Card Number</label>
+                        <input type="text" placeholder="1234 5678 9012 3456" id="cardNumber">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label data-en="Cardholder Name" data-am="የካርድ ባለቤት ስም">Cardholder Name</label>
+                        <input type="text" placeholder="John Doe" id="cardName">
+                    </div>
+                    
+                    <div class="card-row">
+                        <div class="form-group">
+                            <label data-en="Expiry" data-am="የሚያበቃበት ቀን">Expiry</label>
+                            <input type="text" placeholder="MM/YY" id="expiry">
+                        </div>
+                        <div class="form-group">
+                            <label data-en="CVV" data-am="ሲቪቪ">CVV</label>
+                            <input type="password" placeholder="123" id="cvv">
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary payment-button" onclick="processPayment('card')">
+                    <span data-en="Pay with Card" data-am="በካርድ ይክፈሉ">Pay with Card</span>
+                </button>
+            </div>
+            
+            <!-- QR Code Content -->
+            <div class="method-content" id="qrPayment">
+                <div class="qr-code">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=HOMEDIRECT-PAYMENT-123456" alt="QR Code">
+                    <p data-en="Scan with TeleBirr or any banking app"
+                       data-am="በቴሌብር ወይም በማንኛውም የባንክ መተግበሪያ ይቃኙ">
+                        Scan with TeleBirr or any banking app
+                    </p>
+                </div>
+                
+                <div style="text-align: center;">
+                    <p data-en="Amount: ₿4,500,000" data-am="መጠን፡ ብር 4,500,000">Amount: ₿4,500,000</p>
+                    <p data-en="Reference: HMD-123456" data-am="ማጣቀሻ፡ HMD-123456">Reference: HMD-123456</p>
+                </div>
+                
+                <button class="btn btn-outline payment-button" onclick="checkPaymentStatus()">
+                    <span data-en="I've Made the Payment" data-am="ክፍያውን አድርጌአለሁ">I've Made the Payment</span>
+                </button>
+            </div>
+            
+            <!-- Security Badge -->
+            <div class="security-badge">
+                <i class="fas fa-lock"></i>
+                <span data-en="256-bit SSL Encrypted" data-am="በ256-ቢት ኤስኤስኤል የተመሰጠረ">256-bit SSL Encrypted</span>
+                <i class="fas fa-shield-alt"></i>
+                <span data-en="PCI Compliant" data-am="ፒሲአይ ተኳሃኝ">PCI Compliant</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Success Modal -->
+    <div id="paymentSuccessModal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <span class="close" onclick="closeModal('paymentSuccess')">&times;</span>
+            <div class="success-icon" style="margin: 2rem auto;">
+                <i class="fas fa-check-circle" style="font-size: 5rem; color: var(--green);"></i>
+            </div>
+            <h2 data-en="Payment Successful!" data-am="ክፍያ ተሳክቷል!">Payment Successful!</h2>
+            <p data-en="Your transaction has been completed successfully."
+               data-am="ግብይትዎ በተሳካ ሁኔታ ተጠናቋል።">
+                Your transaction has been completed successfully.
+            </p>
+            <p style="margin: 1rem 0;" id="transactionId">Transaction ID: TXN123456789</p>
+            <button class="btn btn-primary" onclick="navigateTo('dashboard')">
+                <span data-en="Go to Dashboard" data-am="ወደ ዳሽቦርድ ይሂዱ">Go to Dashboard</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let selectedPaymentMethod = null;
+        
+        function switchPaymentTab(tab) {
+            // Update tabs
+            document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+            event.target.closest('.method-tab').classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.method-content').forEach(c => c.classList.remove('active'));
+            if (tab === 'mobile') document.getElementById('mobileMoney').classList.add('active');
+            else if (tab === 'bank') document.getElementById('bankTransfer').classList.add('active');
+            else if (tab === 'card') document.getElementById('cardPayment').classList.add('active');
+            else if (tab === 'qr') document.getElementById('qrPayment').classList.add('active');
+        }
+        
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            
+            // Remove selected class from all cards
+            document.querySelectorAll('.mobile-money-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked card
+            event.currentTarget.classList.add('selected');
+        }
+        
+        function selectBank(bank) {
+            // Remove selected class from all banks
+            document.querySelectorAll('.bank-item').forEach(b => {
+                b.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked bank
+            event.currentTarget.classList.add('selected');
+        }
+        
+        function processPayment(method) {
+            showNotification('Processing payment...', 'info');
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                // Generate transaction ID
+                const transactionId = 'TXN' + Date.now();
+                document.getElementById('transactionId').textContent = 'Transaction ID: ' + transactionId;
+                
+                // Show success modal
+                openModal('paymentSuccess');
+                
+                // Track payment
+                analytics.trackEvent('payment', {
+                    method: method,
+                    amount: 4500000,
+                    transactionId: transactionId
+                });
+                
+                showNotification('Payment successful!', 'success');
+            }, 2000);
+        }
+        
+        function checkPaymentStatus() {
+            showNotification('Checking payment status...', 'info');
+            
+            setTimeout(() => {
+                openModal('paymentSuccess');
+            }, 2000);
+        }
+    </script>
+
+    <script src="js/language.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

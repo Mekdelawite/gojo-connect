@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Agreements - HomeDirect Ethiopia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .agreements-container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 2rem;
+        }
+        
+        .agreement-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .agreement-types {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .agreement-type-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+        
+        .agreement-type-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .agreement-type-card.selected {
+            border-color: var(--primary);
+        }
+        
+        .agreement-type-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .agreement-type-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .agreement-form {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .agreement-preview {
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px dashed var(--primary);
+        }
+        
+        .signature-area {
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            height: 150px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: crosshair;
+        }
+        
+        .signature-pad {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .my-agreements {
+            margin-top: 3rem;
+        }
+        
+        .agreement-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+        }
+        
+        .agreement-status {
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+        }
+        
+        .status-draft { background: #e2e3e5; color: #383d41; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-signed { background: #d4edda; color: #155724; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo" onclick="navigateTo('index')">
+            HomeDirect <span class="amharic">ሆምዳይሬክት</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" data-en="Home" data-am="መነሻ">Home</a>
+            <a href="buy.html" data-en="Buy" data-am="መግዛት">Buy</a>
+            <a href="rent.html" data-en="Rent" data-am="ማከራየት">Rent</a>
+            <a href="sell.html" data-en="Sell" data-am="መሸጥ">Sell</a>
+            <a href="#" onclick="openModal('login')" data-en="Login" data-am="ግባ">Login</a>
+            <button class="btn btn-primary" onclick="openModal('signup')" data-en="Sign Up" data-am="ተመዝገብ">Sign Up</button>
+        </div>
+        <div class="mobile-menu" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <div class="agreements-container">
+        <div class="agreement-header">
+            <h1 data-en="Digital Agreements" data-am="ዲጂታል ውሎች">Digital Agreements</h1>
+            <p data-en="Create, sign, and manage legally binding agreements online"
+               data-am="ህጋዊ ውሎችን በመስመር ላይ ይፍጠሩ፣ ይፈርሙ እና ያስተዳድሩ">
+                Create, sign, and manage legally binding agreements online
+            </p>
+        </div>
+
+        <!-- Agreement Types -->
+        <div class="agreement-types">
+            <div class="agreement-type-card" onclick="selectAgreementType('rental')">
+                <div class="agreement-type-icon">
+                    <i class="fas fa-file-contract"></i>
+                </div>
+                <h3 data-en="Rental Agreement" data-am="የኪራይ ውል">Rental Agreement</h3>
+                <p data-en="For residential or commercial rentals"
+                   data-am="ለመኖሪያ ወይም ለንግድ ኪራይ">
+                    For residential or commercial rentals
+                </p>
+            </div>
+            
+            <div class="agreement-type-card" onclick="selectAgreementType('sale')">
+                <div class="agreement-type-icon">
+                    <i class="fas fa-file-signature"></i>
+                </div>
+                <h3 data-en="Sale Agreement" data-am="የሽያጭ ውል">Sale Agreement</h3>
+                <p data-en="For property purchase and sale"
+                   data-am="ለንብረት ግዢ እና ሽያጭ">
+                    For property purchase and sale
+                </p>
+            </div>
+            
+            <div class="agreement-type-card" onclick="selectAgreementType('nda')">
+                <div class="agreement-type-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <h3 data-en="NDA" data-am="የምስጢር ስምምነት">NDA</h3>
+                <p data-en="Non-disclosure agreement"
+                   data-am="የምስጢር ስምምነት">
+                    Non-disclosure agreement
+                </p>
+            </div>
+        </div>
+
+        <!-- Agreement Form -->
+        <div class="agreement-form" id="agreementForm">
+            <h3 id="formTitle" data-en="Create Rental Agreement" data-am="የኪራይ ውል ይፍጠሩ">Create Rental Agreement</h3>
+            
+            <form id="agreementFormFields">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label data-en="Property Address" data-am="የንብረት አድራሻ">Property Address *</label>
+                        <input type="text" id="propertyAddress" placeholder="e.g., Bole, Addis Ababa" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-en="Property Type" data-am="የንብረት አይነት">Property Type</label>
+                        <select id="propertyType">
+                            <option value="apartment">Apartment</option>
+                            <option value="house">House</option>
+                            <option value="villa">Villa</option>
+                            <option value="commercial">Commercial</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label data-en="Landlord Name" data-am="የባለቤት ስም">Landlord Name *</label>
+                        <input type="text" id="landlordName" placeholder="Full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-en="Landlord Phone" data-am="የባለቤት ስልክ">Landlord Phone</label>
+                        <input type="tel" id="landlordPhone" placeholder="+251 911 234 567">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label data-en="Tenant Name" data-am="የተከራይ ስም">Tenant Name *</label>
+                        <input type="text" id="tenantName" placeholder="Full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-en="Tenant Phone" data-am="የተከራይ ስልክ">Tenant Phone</label>
+                        <input type="tel" id="tenantPhone" placeholder="+251 911 234 567">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label data-en="Monthly Rent (Birr)" data-am="ወርሃዊ ኪራይ (ብር)">Monthly Rent (Birr) *</label>
+                        <input type="number" id="monthlyRent" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-en="Security Deposit" data-am="የተያዥ ገንዘብ">Security Deposit</label>
+                        <input type="number" id="securityDeposit" min="0" value="0">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label data-en="Start Date" data-am="የሚጀምርበት ቀን">Start Date *</label>
+                        <input type="date" id="startDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-en="End Date" data-am="የሚጠናቀቅበት ቀን">End Date *</label>
+                        <input type="date" id="endDate" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label data-en="Payment Terms" data-am="የክፍያ ውሎች">Payment Terms</label>
+                    <select id="paymentTerms">
+                        <option value="monthly">Monthly in advance</option>
+                        <option value="quarterly">Quarterly in advance</option>
+                        <option value="yearly">Yearly in advance</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label data-en="Additional Terms" data-am="ተጨማሪ ውሎች">Additional Terms</label>
+                    <textarea id="additionalTerms" rows="4" placeholder="Any special conditions or terms..."></textarea>
+                </div>
+
+                <!-- Preview -->
+                <div class="agreement-preview" id="agreementPreview">
+                    <h4 data-en="Agreement Preview" data-am="የውል ቅድመ-እይታ">Agreement Preview</h4>
+                    <div id="previewContent">
+                        <p>This Rental Agreement is made on <span id="previewDate">[Date]</span> between <span id="previewLandlord">[Landlord]</span> (Landlord) and <span id="previewTenant">[Tenant]</span> (Tenant).</p>
+                        <p>The Landlord agrees to rent the property located at <span id="previewAddress">[Address]</span> to the Tenant for a monthly rent of <span id="previewRent">[Rent]</span> Birr.</p>
+                        <p>The tenancy shall begin on <span id="previewStart">[Start Date]</span> and end on <span id="previewEnd">[End Date]</span>.</p>
+                    </div>
+                </div>
+
+                <!-- Signature -->
+                <div class="form-group">
+                    <label data-en="Digital Signature" data-am="ዲጂታል ፊርማ">Digital Signature</label>
+                    <div class="signature-area" id="signaturePad" onclick="openSignaturePad()">
+                        <i class="fas fa-pen"></i> Click to sign
+                    </div>
+                    <input type="hidden" id="signature">
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" id="agreeTerms" required>
+                        <span data-en="I confirm that all information provided is accurate and I agree to the terms"
+                              data-am="የሰጠሁት መረጃ ትክክል መሆኑን እና ውሎቹን እንደተቀበልኩ አረጋግጣለሁ">
+                            I confirm that all information provided is accurate and I agree to the terms
+                        </span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-file-signature"></i> 
+                    <span data-en="Create & Sign Agreement" data-am="ውል ፍጠር እና ፈርም">Create & Sign Agreement</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- My Agreements -->
+        <div class="my-agreements">
+            <h3 data-en="My Agreements" data-am="ውሎቼ">My Agreements</h3>
+            
+            <div class="agreement-item">
+                <div>
+                    <h4>Rental Agreement - Bole Villa</h4>
+                    <p>Between Alemitu T. and Biruk D.</p>
+                </div>
+                <div>
+                    <span class="agreement-status status-signed">Signed</span>
+                    <span>2026-02-15</span>
+                    <button class="btn btn-outline" onclick="downloadAgreement('AGR001')">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="agreement-item">
+                <div>
+                    <h4>Sale Agreement - Kazanchis Apartment</h4>
+                    <p>Between Meron G. and Henok T.</p>
+                </div>
+                <div>
+                    <span class="agreement-status status-pending">Pending Signatures</span>
+                    <span>2026-02-20</span>
+                    <button class="btn btn-outline" onclick="continueAgreement('AGR002')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signature Modal -->
+    <div id="signatureModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close" onclick="closeModal('signature')">&times;</span>
+            <h2 data-en="Draw Your Signature" data-am="ፊርማዎን ይሳሉ">Draw Your Signature</h2>
+            
+            <canvas id="signatureCanvas" width="500" height="200" style="border: 1px solid #ddd; width: 100%; height: auto;"></canvas>
+            
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <button class="btn btn-outline" onclick="clearSignature()">
+                    <i class="fas fa-undo"></i> Clear
+                </button>
+                <button class="btn btn-primary" onclick="saveSignature()">
+                    <i class="fas fa-check"></i> Save Signature
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentAgreementType = 'rental';
+        let signatureCanvas = null;
+        let isDrawing = false;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            updateFormPreview();
+            
+            // Add input listeners for preview
+            document.querySelectorAll('#agreementFormFields input, #agreementFormFields select').forEach(input => {
+                input.addEventListener('input', updateFormPreview);
+            });
+        });
+        
+        function selectAgreementType(type) {
+            currentAgreementType = type;
+            
+            // Update UI
+            document.querySelectorAll('.agreement-type-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            
+            // Update form title
+            const titles = {
+                'rental': 'Create Rental Agreement',
+                'sale': 'Create Sale Agreement',
+                'nda': 'Create Non-Disclosure Agreement'
+            };
+            document.getElementById('formTitle').textContent = titles[type];
+            
+            // Show/hide relevant fields
+            updateFormFields();
+        }
+        
+        function updateFormFields() {
+            const form = document.getElementById('agreementFormFields');
+            
+            if (currentAgreementType === 'sale') {
+                // Show sale-specific fields
+                document.querySelector('[for="monthlyRent"]').textContent = 'Sale Price (Birr) *';
+                document.querySelector('[for="securityDeposit"]').parentElement.style.display = 'none';
+            } else {
+                // Show rental fields
+                document.querySelector('[for="monthlyRent"]').textContent = 'Monthly Rent (Birr) *';
+                document.querySelector('[for="securityDeposit"]').parentElement.style.display = 'block';
+            }
+        }
+        
+        function updateFormPreview() {
+            const landlord = document.getElementById('landlordName')?.value || '[Landlord]';
+            const tenant = document.getElementById('tenantName')?.value || '[Tenant]';
+            const address = document.getElementById('propertyAddress')?.value || '[Address]';
+            const rent = document.getElementById('monthlyRent')?.value || '[Rent]';
+            const start = document.getElementById('startDate')?.value || '[Start Date]';
+            const end = document.getElementById('endDate')?.value || '[End Date]';
+            
+            document.getElementById('previewLandlord').textContent = landlord;
+            document.getElementById('previewTenant').textContent = tenant;
+            document.getElementById('previewAddress').textContent = address;
+            document.getElementById('previewRent').textContent = rent;
+            document.getElementById('previewStart').textContent = start;
+            document.getElementById('previewEnd').textContent = end;
+            document.getElementById('previewDate').textContent = new Date().toLocaleDateString();
+        }
+        
+        function openSignaturePad() {
+            openModal('signature');
+            
+            setTimeout(() => {
+                const canvas = document.getElementById('signatureCanvas');
+                signatureCanvas = canvas.getContext('2d');
+                
+                // Setup drawing
+                canvas.addEventListener('mousedown', startDrawing);
+                canvas.addEventListener('mousemove', draw);
+                canvas.addEventListener('mouseup', stopDrawing);
+                canvas.addEventListener('mouseleave', stopDrawing);
+                
+                // Touch support
+                canvas.addEventListener('touchstart', startDrawing);
+                canvas.addEventListener('touchmove', draw);
+                canvas.addEventListener('touchend', stopDrawing);
+            }, 100);
+        }
+        
+        function startDrawing(e) {
+            isDrawing = true;
+            const pos = getMousePos(e);
+            signatureCanvas.beginPath();
+            signatureCanvas.moveTo(pos.x, pos.y);
+        }
+        
+        function draw(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            
+            const pos = getMousePos(e);
+            signatureCanvas.lineTo(pos.x, pos.y);
+            signatureCanvas.strokeStyle = '#000';
+            signatureCanvas.lineWidth = 2;
+            signatureCanvas.stroke();
+        }
+        
+        function stopDrawing() {
+            isDrawing = false;
+        }
+        
+        function getMousePos(e) {
+            const canvas = document.getElementById('signatureCanvas');
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            let clientX, clientY;
+            if (e.touches) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
+            };
+        }
+        
+        function clearSignature() {
+            const canvas = document.getElementById('signatureCanvas');
+            signatureCanvas.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        function saveSignature() {
+            const canvas = document.getElementById('signatureCanvas');
+            const signatureData = canvas.toDataURL();
+            document.getElementById('signature').value = signatureData;
+            
+            closeModal('signature');
+            document.getElementById('signaturePad').innerHTML = '<i class="fas fa-check" style="color: green;"></i> Signature saved';
+        }
+        
+        // Handle form submission
+        document.getElementById('agreementFormFields').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!document.getElementById('agreeTerms').checked) {
+                showNotification('Please agree to the terms', 'warning');
+                return;
+            }
+            
+            if (!document.getElementById('signature').value) {
+                showNotification('Please add your signature', 'warning');
+                return;
+            }
+            
+            showNotification('Creating agreement...', 'info');
+            
+            // Simulate creation
+            setTimeout(() => {
+                const agreementId = 'AGR' + Date.now();
+                
+                // Save to localStorage
+                const agreements = JSON.parse(localStorage.getItem('agreements') || '[]');
+                agreements.push({
+                    id: agreementId,
+                    type: currentAgreementType,
+                    landlord: document.getElementById('landlordName').value,
+                    tenant: document.getElementById('tenantName').value,
+                    property: document.getElementById('propertyAddress').value,
+                    date: new Date().toISOString(),
+                    status: 'signed'
+                });
+                localStorage.setItem('agreements', JSON.stringify(agreements));
+                
+                showNotification('Agreement created and signed successfully!', 'success');
+                
+                // Redirect to view
+                setTimeout(() => {
+                    window.location.href = `agreement-view.html?id=${agreementId}`;
+                }, 1500);
+            }, 2000);
+        });
+        
+        function downloadAgreement(id) {
+            showNotification('Downloading agreement...', 'info');
+            setTimeout(() => {
+                showNotification('Agreement downloaded as PDF', 'success');
+            }, 1500);
+        }
+        
+        function continueAgreement(id) {
+            showNotification('Continuing agreement...', 'info');
+        }
+    </script>
+
+    <script src="js/language.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

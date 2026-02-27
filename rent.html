@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent Properties - HomeDirect Ethiopia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .rent-header {
+            background: linear-gradient(135deg, #00843D 0%, #FCD116 100%);
+            color: var(--primary);
+            padding: 3rem 5%;
+            text-align: center;
+        }
+        
+        .rental-badge {
+            background: var(--accent);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        
+        .price-per-month {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-left: 0.5rem;
+        }
+        
+        .quick-filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        
+        .quick-filter-btn {
+            padding: 0.5rem 1.5rem;
+            border: 1px solid var(--gray);
+            border-radius: 50px;
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .quick-filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .rental-terms {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 0.5rem 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .rental-term {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            background: var(--light-gray);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo" onclick="navigateTo('index')">
+            HomeDirect <span class="amharic">ሆምዳይሬክት</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" data-en="Home" data-am="መነሻ">Home</a>
+            <a href="buy.html" data-en="Buy" data-am="መግዛት">Buy</a>
+            <a href="rent.html" class="active" data-en="Rent" data-am="ማከራየት">Rent</a>
+            <a href="sell.html" data-en="Sell" data-am="መሸጥ">Sell</a>
+            <a href="#" onclick="openModal('login')" data-en="Login" data-am="ግባ">Login</a>
+            <button class="btn btn-primary" onclick="openModal('signup')" data-en="Sign Up" data-am="ተመዝገብ">Sign Up</button>
+        </div>
+        <div class="mobile-menu" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- Rent Header -->
+    <section class="rent-header">
+        <h1 data-en="Find Your Perfect Rental" data-am="የሚፈልጉትን የኪራይ ቤት ያግኙ">
+            Find Your Perfect Rental
+        </h1>
+        <p data-en="Thousands of verified rental properties across Ethiopia"
+           data-am="በመላው ኢትዮጵያ በሺዎች የሚቆጠሩ የተረጋገጡ የኪራይ ንብረቶች">
+            Thousands of verified rental properties across Ethiopia
+        </p>
+        
+        <div class="rental-terms">
+            <span class="rental-term" data-en="Monthly" data-am="ወርሃዊ">Monthly</span>
+            <span class="rental-term" data-en="Yearly" data-am="ዓመታዊ">Yearly</span>
+            <span class="rental-term" data-en="Short-term" data-am="የአጭር ጊዜ">Short-term</span>
+            <span class="rental-term" data-en="Long-term" data-am="የረጅም ጊዜ">Long-term</span>
+        </div>
+    </section>
+
+    <!-- Quick Filters -->
+    <div class="container">
+        <div class="quick-filters">
+            <button class="quick-filter-btn active" onclick="filterRentals('all')">
+                <span data-en="All Rentals" data-am="ሁሉም ኪራዮች">All Rentals</span>
+            </button>
+            <button class="quick-filter-btn" onclick="filterRentals('apartment')">
+                <span data-en="Apartments" data-am="አፓርታማ">Apartments</span>
+            </button>
+            <button class="quick-filter-btn" onclick="filterRentals('house')">
+                <span data-en="Houses" data-am="ቤቶች">Houses</span>
+            </button>
+            <button class="quick-filter-btn" onclick="filterRentals('furnished')">
+                <span data-en="Furnished" data-am="የተሟላ">Furnished</span>
+            </button>
+            <button class="quick-filter-btn" onclick="filterRentals('unfurnished')">
+                <span data-en="Unfurnished" data-am="ባዶ">Unfurnished</span>
+            </button>
+            <button class="quick-filter-btn" onclick="filterRentals('shared')">
+                <span data-en="Shared" data-am="የጋራ">Shared</span>
+            </button>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label data-en="Location" data-am="አካባቢ">Location</label>
+                    <select id="locationFilter">
+                        <option value="all" data-en="All Addis Ababa" data-am="ሁሉም አዲስ አበባ">All Addis Ababa</option>
+                        <option value="bole">Bole</option>
+                        <option value="kazanchis">Kazanchis</option>
+                        <option value="cmc">CMC</option>
+                        <option value="gerji">Gerji</option>
+                        <option value="sarbet">Sarbet</option>
+                        <option value="megenagna">Megenagna</option>
+                        <option value="piazza">Piazza</option>
+                        <option value="4-kilo">4 Kilo</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label data-en="Property Type" data-am="የንብረት አይነት">Property Type</label>
+                    <select id="typeFilter">
+                        <option value="all" data-en="All Types" data-am="ሁሉም አይነት">All Types</option>
+                        <option value="apartment">Apartment</option>
+                        <option value="house">House</option>
+                        <option value="villa">Villa</option>
+                        <option value="condo">Condo</option>
+                        <option value="studio">Studio</option>
+                        <option value="shared">Shared Room</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label data-en="Bedrooms" data-am="መኝታ ቤት">Bedrooms</label>
+                    <select id="bedroomsFilter">
+                        <option value="any" data-en="Any" data-am="ማንኛውም">Any</option>
+                        <option value="studio">Studio</option>
+                        <option value="1">1 Bed</option>
+                        <option value="2">2 Beds</option>
+                        <option value="3">3 Beds</option>
+                        <option value="4">4+ Beds</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label data-en="Monthly Rent (Birr)" data-am="ወርሃዊ ኪራይ (ብር)">Monthly Rent (Birr)</label>
+                    <div class="price-range">
+                        <input type="number" id="minRent" placeholder="Min" min="0" step="1000">
+                        <span>-</span>
+                        <input type="number" id="maxRent" placeholder="Max" min="0" step="1000">
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <label data-en="Furnishing" data-am="የቤት እቃ">Furnishing</label>
+                    <select id="furnishingFilter">
+                        <option value="any" data-en="Any" data-am="ማንኛውም">Any</option>
+                        <option value="furnished">Furnished</option>
+                        <option value="semi-furnished">Semi-Furnished</option>
+                        <option value="unfurnished">Unfurnished</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="filter-actions">
+                <button class="btn btn-outline" onclick="resetRentFilters()">
+                    <i class="fas fa-undo"></i> <span data-en="Reset" data-am="ዳግም አስጀምር">Reset</span>
+                </button>
+                <button class="btn btn-primary" onclick="applyRentFilters()">
+                    <i class="fas fa-search"></i> <span data-en="Find Rentals" data-am="ኪራይ ፈልግ">Find Rentals</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sort Bar -->
+        <div class="sort-bar">
+            <div class="results-count">
+                <span data-en="Showing" data-am="እያሳየ ያለው">Showing</span> 
+                <span id="rentalCount">156</span> 
+                <span data-en="rentals" data-am="ኪራዮች">rentals</span>
+            </div>
+            
+            <div style="display: flex; gap: 1rem;">
+                <select class="sort-select" id="rentSort" onchange="sortRentals()">
+                    <option value="newest" data-en="Newest First" data-am="አዲስ መጀመሪያ">Newest First</option>
+                    <option value="price-low" data-en="Price: Low to High" data-am="ዋጋ፡ ከዝቅተኛ ወደ ከፍተኛ">Price: Low to High</option>
+                    <option value="price-high" data-en="Price: High to Low" data-am="ዋጋ፡ ከከፍተኛ ወደ ዝቅተኛ">Price: High to Low</option>
+                                        <option value="popular" data-en="Most Popular" data-am="በጣም ታዋቂ">Most Popular</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Rentals Grid -->
+        <div id="rentalsContainer" class="properties-grid grid-view">
+            <!-- Rentals loaded via JavaScript -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="rentPagination">
+            <button class="page-btn"><i class="fas fa-chevron-left"></i></button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">4</button>
+            <button class="page-btn">5</button>
+            <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <!-- Rental Guide Modal -->
+    <div id="rentalGuideModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close" onclick="closeModal('rentalGuide')">&times;</span>
+            <h2 data-en="Rental Guide for Tenants" data-am="ለተከራዮች መመሪያ">Rental Guide for Tenants</h2>
+            
+            <div style="margin: 2rem 0;">
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="width: 40px; height: 40px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">1</div>
+                    <div>
+                        <h3 data-en="Verify with FaydaID" data-am="በፋይዳ አይዲ ያረጋግጡ">Verify with FaydaID</h3>
+                        <p data-en="Complete your identity verification to show landlords you're genuine" data-am="ለባለቤቶች እውነተኛ መሆንዎን ለማሳየት ማንነትዎን ያረጋግጡ">Complete your identity verification to show landlords you're genuine</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="width: 40px; height: 40px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">2</div>
+                    <div>
+                        <h3 data-en="Search with Filters" data-am="በማጣሪያ ይፈልጉ">Search with Filters</h3>
+                        <p data-en="Use our advanced filters to find exactly what you need" data-am="የሚፈልጉትን በትክክል ለማግኘት የላቁ ማጣሪያዎችን ይጠቀሙ">Use our advanced filters to find exactly what you need</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="width: 40px; height: 40px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">3</div>
+                    <div>
+                        <h3 data-en="Tour the Property" data-am="ንብረቱን ይመልከቱ">Tour the Property</h3>
+                        <p data-en="Schedule a visit directly with the owner" data-am="ከባለቤቱ ጋር በቀጥታ የጉብኝት ቀን ይያዙ">Schedule a visit directly with the owner</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="width: 40px; height: 40px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">4</div>
+                    <div>
+                        <h3 data-en="Digital Agreement" data-am="ዲጂታል ውል">Digital Agreement</h3>
+                        <p data-en="Create and sign rental agreement online" data-am="የኪራይ ውል በመስመር ላይ ይፍጠሩ እና ይፈርሙ">Create and sign rental agreement online</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="width: 40px; height: 40px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">5</div>
+                    <div>
+                        <h3 data-en="Pay via Escrow" data-am="በኤስክሮው ይክፈሉ">Pay via Escrow</h3>
+                        <p data-en="Security deposit and rent payments protected by escrow" data-am="የተያዥ ገንዘብ እና የኪራይ ክፍያ በኤስክሮው የተጠበቀ">Security deposit and rent payments protected by escrow</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary btn-block" onclick="closeModal('rentalGuide')">
+                <span data-en="Got it!" data-am="ገባኝ!">Got it!</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function loadRentals() {
+            const container = document.getElementById('rentalsContainer');
+            const rentals = generateRentals(24);
+            
+            container.innerHTML = rentals.map(property => `
+                <div class="property-card" onclick="viewRental('${property.id}')">
+                    <div class="property-image">
+                        <i class="fas fa-building"></i>
+                        <span class="property-tag">For Rent</span>
+                        <span class="property-verified">
+                            <i class="fas fa-check-circle"></i> Verified
+                        </span>
+                        ${property.furnished ? '<span class="rental-badge">Furnished</span>' : ''}
+                    </div>
+                    <div class="property-details">
+                        <div class="property-price">
+                            ₿${property.price.toLocaleString()}<small class="price-per-month">/month</small>
+                        </div>
+                        <div class="property-location">
+                            <i class="fas fa-map-marker-alt"></i> ${property.location}, Addis Ababa
+                        </div>
+                        <div class="property-features">
+                            <span><i class="fas fa-bed"></i> ${property.bedrooms} Bed</span>
+                            <span><i class="fas fa-bath"></i> ${property.bathrooms} Bath</span>
+                            <span><i class="fas fa-vector-square"></i> ${property.area} sq.m</span>
+                        </div>
+                        <div class="property-features" style="margin-top: 0.5rem;">
+                            <span><i class="fas fa-car"></i> Parking</span>
+                            <span><i class="fas fa-shield-alt"></i> Security</span>
+                            <span><i class="fas fa-water"></i> Water</span>
+                        </div>
+                        <div class="owner-info">
+                            <div class="owner-avatar">${property.owner.charAt(0)}</div>
+                            <div>
+                                <div style="font-weight: 600;">${property.owner}</div>
+                                <div class="verified-badge">
+                                    <i class="fas fa-check-circle"></i> FaydaID Verified
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function generateRentals(count) {
+            const locations = ['Bole', 'Kazanchis', 'CMC', 'Gerji', 'Sarbet', 'Megenagna', 'Piazza', '4 Kilo', 'Gergi', 'Old Airport'];
+            const owners = ['Alemitu T.', 'Biruk D.', 'Meron G.', 'Henok T.', 'Azeb D.', 'Birtukan T.', 'Solomon A.', 'Tigist H.'];
+            const rentals = [];
+            
+            for (let i = 0; i < count; i++) {
+                rentals.push({
+                    id: 'RENT' + (1000 + i),
+                    price: Math.floor(Math.random() * 50000) + 5000,
+                    location: locations[Math.floor(Math.random() * locations.length)],
+                    bedrooms: Math.floor(Math.random() * 4) + 1,
+                    bathrooms: Math.floor(Math.random() * 3) + 1,
+                    area: Math.floor(Math.random() * 150) + 50,
+                    owner: owners[Math.floor(Math.random() * owners.length)],
+                    furnished: Math.random() > 0.5,
+                    type: ['apartment', 'house', 'studio'][Math.floor(Math.random() * 3)]
+                });
+            }
+            return rentals;
+        }
+        
+        function viewRental(rentalId) {
+            localStorage.setItem('currentRental', rentalId);
+            window.location.href = 'property-detail.html?type=rent&id=' + rentalId;
+        }
+        
+        function filterRentals(type) {
+            document.querySelectorAll('.quick-filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            showNotification(`Filtering by: ${type}`, 'info');
+            loadRentals();
+        }
+        
+        function applyRentFilters() {
+            const location = document.getElementById('locationFilter').value;
+            const type = document.getElementById('typeFilter').value;
+            const bedrooms = document.getElementById('bedroomsFilter').value;
+            const furnishing = document.getElementById('furnishingFilter').value;
+            
+            showNotification('Applying filters...', 'info');
+            setTimeout(() => {
+                showNotification('Filters applied! Found 24 rentals', 'success');
+            }, 1000);
+        }
+        
+        function resetRentFilters() {
+            document.getElementById('locationFilter').value = 'all';
+            document.getElementById('typeFilter').value = 'all';
+            document.getElementById('bedroomsFilter').value = 'any';
+            document.getElementById('furnishingFilter').value = 'any';
+            document.getElementById('minRent').value = '';
+            document.getElementById('maxRent').value = '';
+            showNotification('Filters reset', 'info');
+        }
+        
+        function sortRentals() {
+            const sortBy = document.getElementById('rentSort').value;
+            showNotification(`Sorting by: ${sortBy}`, 'info');
+        }
+        
+        // Load on page init
+        document.addEventListener('DOMContentLoaded', function() {
+            loadRentals();
+            // Show rental guide for first-time visitors
+            if (!localStorage.getItem('rentalGuideSeen')) {
+                setTimeout(() => {
+                    openModal('rentalGuide');
+                    localStorage.setItem('rentalGuideSeen', 'true');
+                }, 1000);
+            }
+        });
+    </script>
+
+    <script src="js/language.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,643 @@
+       <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Details - HomeDirect Ethiopia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .property-detail-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .property-gallery {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .main-image {
+            width: 100%;
+            height: 400px;
+            background: var(--gradient-primary);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+        }
+        
+        .thumbnail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .thumbnail {
+            height: 195px;
+            background: var(--gradient-primary);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .property-title-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .property-price-large {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        
+        .property-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .action-btn {
+            width: 50px;
+            height: 50px;
+            border: 1px solid var(--gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .action-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .property-specs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .spec-item {
+            text-align: center;
+        }
+        
+        .spec-item i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .spec-item h4 {
+            font-size: 1.5rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .property-description {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+        
+        .owner-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .owner-avatar-large {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .owner-info h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .contact-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .features-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .feature-badge {
+            padding: 0.5rem 1rem;
+            background: var(--light-gray);
+            border-radius: 50px;
+            font-size: 0.9rem;
+        }
+        
+        .location-map {
+            height: 300px;
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .similar-properties {
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo" onclick="navigateTo('index')">
+            HomeDirect <span class="amharic">ሆምዳይሬክት</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" data-en="Home" data-am="መነሻ">Home</a>
+            <a href="buy.html" data-en="Buy" data-am="መግዛት">Buy</a>
+            <a href="rent.html" data-en="Rent" data-am="ማከራየት">Rent</a>
+            <a href="sell.html" data-en="Sell" data-am="መሸጥ">Sell</a>
+            <a href="#" onclick="openModal('login')" data-en="Login" data-am="ግባ">Login</a>
+            <button class="btn btn-primary" onclick="openModal('signup')" data-en="Sign Up" data-am="ተመዝገብ">Sign Up</button>
+        </div>
+        <div class="mobile-menu" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <div class="property-detail-container">
+        <!-- Gallery -->
+        <div class="property-gallery">
+            <div class="main-image" id="mainImage">
+                <i class="fas fa-home"></i>
+            </div>
+            <div class="thumbnail-grid" id="thumbnails">
+                <div class="thumbnail"><i class="fas fa-image"></i></div>
+                <div class="thumbnail"><i class="fas fa-image"></i></div>
+                <div class="thumbnail"><i class="fas fa-image"></i></div>
+                <div class="thumbnail"><i class="fas fa-image"></i></div>
+            </div>
+        </div>
+
+        <!-- Title Section -->
+        <div class="property-title-section">
+            <div>
+                <h1 id="propertyTitle">Modern 3 Bedroom Villa in Bole</h1>
+                <p id="propertyLocation"><i class="fas fa-map-marker-alt"></i> Bole, Addis Ababa</p>
+            </div>
+            <div>
+                <div class="property-price-large" id="propertyPrice">₿4,500,000</div>
+                <p id="priceType" style="text-align: right;">Total Price</p>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="property-actions">
+            <div class="action-btn" onclick="toggleFavorite()" id="favoriteBtn">
+                <i class="far fa-heart"></i>
+            </div>
+            <div class="action-btn" onclick="shareProperty()">
+                <i class="fas fa-share-alt"></i>
+            </div>
+            <div class="action-btn" onclick="printProperty()">
+                <i class="fas fa-print"></i>
+            </div>
+        </div>
+
+        <!-- Specifications -->
+        <div class="property-specs">
+            <div class="spec-item">
+                <i class="fas fa-bed"></i>
+                <h4 id="bedrooms">3</h4>
+                <p data-en="Bedrooms" data-am="መኝታ ቤቶች">Bedrooms</p>
+            </div>
+            <div class="spec-item">
+                <i class="fas fa-bath"></i>
+                <h4 id="bathrooms">2</h4>
+                <p data-en="Bathrooms" data-am="መታጠቢያ ቤቶች">Bathrooms</p>
+            </div>
+            <div class="spec-item">
+                <i class="fas fa-vector-square"></i>
+                <h4 id="area">180</h4>
+                <p data-en="sq.m" data-am="ካሬ ሜትር">sq.m</p>
+            </div>
+            <div class="spec-item">
+                <i class="fas fa-car"></i>
+                <h4 id="parking">2</h4>
+                <p data-en="Parking" data-am="ማቆሚያ">Parking</p>
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="property-description">
+            <h3 data-en="Description" data-am="ገለጻ">Description</h3>
+            <p id="propertyDescription">
+                Beautiful modern villa located in the heart of Bole, Addis Ababa. This stunning property features spacious rooms, modern finishes, and is close to all amenities including schools, shopping centers, and restaurants. The property is fully walled with 24/7 security, water tank, and generator backup.
+            </p>
+        </div>
+
+        <!-- Features -->
+        <div class="property-description">
+            <h3 data-en="Features & Amenities" data-am="መገልገያዎች">Features & Amenities</h3>
+            <div class="features-list" id="featuresList">
+                <span class="feature-badge"><i class="fas fa-check-circle" style="color: var(--green);"></i> Parking</span>
+                <span class="feature-badge"><i class="fas fa-check-circle" style="color: var(--green);"></i> 24/7 Security</span>
+                <span class="feature-badge"><i class="fas fa-check-circle" style="color: var(--green);"></i> Water Tank</span>
+                <span class="feature-badge"><i class="fas fa-check-circle" style="color: var(--green);"></i> Generator</span>
+                <span class="feature-badge"><i class="fas fa-check-circle" style="color: var(--green);"></i> Garden</span>
+            </div>
+        </div>
+
+        <!-- Owner Information -->
+        <div class="owner-card">
+            <div class="owner-avatar-large" id="ownerAvatar">AT</div>
+            <div class="owner-info">
+                <h3 id="ownerName">Alemitu Tadesse</h3>
+                <div class="verified-badge" style="margin: 0.5rem 0;">
+                    <i class="fas fa-check-circle"></i> <span data-en="FaydaID Verified" data-am="ፋይዳ አይዲ የተረጋገጠ">FaydaID Verified</span>
+                </div>
+                <p><i class="fas fa-star" style="color: #ffd700;"></i> <span id="ownerRating">4.9</span> (128 reviews)</p>
+                <p data-en="Member since 2024" data-am="ከ2024 ጀምሮ አባል ነው">Member since 2024</p>
+                
+                <div class="contact-actions">
+                    <button class="btn btn-primary" onclick="openChat()">
+                        <i class="fas fa-comment"></i> <span data-en="Chat with Owner" data-am="ከባለቤት ጋር ይወያዩ">Chat with Owner</span>
+                    </button>
+                    <button class="btn btn-outline" onclick="callOwner()">
+                        <i class="fas fa-phone"></i> <span data-en="Call" data-am="ደውል">Call</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location Map -->
+        <div class="location-map">
+            <i class="fas fa-map-marked-alt" style="font-size: 3rem; color: var(--primary);"></i>
+            <p data-en="Map view coming soon" data-am="የካርታ እይታ በቅርቡ ይመጣል">Map view coming soon</p>
+        </div>
+
+        <!-- Similar Properties -->
+        <div class="similar-properties">
+            <h3 data-en="Similar Properties" data-am="ተመሳሳይ ንብረቶች">Similar Properties</h3>
+            <div class="properties-grid" id="similarProperties">
+                <!-- Loaded via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Schedule Visit Modal -->
+    <div id="scheduleModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('schedule')">&times;</span>
+            <h2 data-en="Schedule a Visit" data-am="የጉብኝት ቀን ይያዙ">Schedule a Visit</h2>
+            
+            <form id="scheduleForm">
+                <div class="form-group">
+                    <label data-en="Select Date" data-am="ቀን ይምረጡ">Select Date</label>
+                    <input type="date" id="visitDate" min="            
+                   <input type="date" id="visitDate" min="2026-03-01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label data-en="Select Time" data-am="ሰዓት ይምረጡ">Select Time</label>
+                    <select id="visitTime" required>
+                        <option value="10:00">10:00 AM</option>
+                        <option value="11:00">11:00 AM</option>
+                        <option value="14:00">2:00 PM</option>
+                        <option value="15:00">3:00 PM</option>
+                        <option value="16:00">4:00 PM</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label data-en="Your Name" data-am="ስምዎ">Your Name</label>
+                    <input type="text" id="visitorName" value="John Doe" required>
+                </div>
+                
+                <div class="form-group">
+                    <label data-en="Your Phone" data-am="ስልክ ቁጥርዎ">Your Phone</label>
+                    <input type="tel" id="visitorPhone" value="+251 911 234 567" required>
+                </div>
+                
+                <div class="form-group">
+                    <label data-en="Message (Optional)" data-am="መልዕክት (ካለ)">Message (Optional)</label>
+                    <textarea id="visitMessage" rows="3" placeholder="Any specific questions?"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">
+                    <span data-en="Request Visit" data-am="ጉብኝት ይጠይቁ">Request Visit</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Make Offer Modal -->
+    <div id="offerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('offer')">&times;</span>
+            <h2 data-en="Make an Offer" data-am="ቅናሽ ያቅርቡ">Make an Offer</h2>
+            
+            <form id="offerForm">
+                <div class="form-group">
+                    <label data-en="Your Offer (Birr)" data-am="ቅናሽዎ (ብር)">Your Offer (Birr)</label>
+                    <input type="number" id="offerAmount" class="price-input" placeholder="e.g., 4200000" required>
+                </div>
+                
+                <div class="form-group">
+                    <label data-en="Your Name" data-am="ስምዎ">Your Name</label>
+                    <input type="text" id="offerName" value="John Doe" required>
+                </div>
+                
+                <div class="form-group">
+                    <label data-en="Your Phone" data-am="ስልክ ቁጥርዎ">Your Phone</label>
+                    <input type="tel" id="offerPhone" value="+251 911 234 567" required>
+                </div>
+                
+                <div class="form-group">
+                    <label data-en="Message (Optional)" data-am="መልዕክት (ካለ)">Message (Optional)</label>
+                    <textarea id="offerMessage" rows="3" placeholder="Any conditions or notes?"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" id="offerTerms" required>
+                        <span data-en="I understand this offer is binding if accepted" 
+                              data-am="ይህ ቅናሽ ከተቀበሉ የማይቀለበስ መሆኑን ተረድቻለሁ">
+                            I understand this offer is binding if accepted
+                        </span>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">
+                    <span data-en="Submit Offer" data-am="ቅናሽ አስገባ">Submit Offer</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentProperty = null;
+        let isFavorite = false;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load property data
+            loadPropertyDetails();
+            
+            // Check if property is in favorites
+            checkFavoriteStatus();
+            
+            // Track property view
+            analytics.trackPropertyView(currentProperty?.id || 'unknown');
+        });
+        
+        function loadPropertyDetails() {
+            // Get property ID from URL or localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            const propertyId = urlParams.get('id') || localStorage.getItem('currentProperty');
+            
+            // Mock property data
+            currentProperty = {
+                id: propertyId || 'PROP001',
+                title: 'Modern 3 Bedroom Villa in Bole',
+                location: 'Bole, Addis Ababa',
+                price: 4500000,
+                priceType: 'sale',
+                bedrooms: 3,
+                bathrooms: 2,
+                area: 180,
+                parking: 2,
+                description: 'Beautiful modern villa located in the heart of Bole, Addis Ababa. This stunning property features spacious rooms, modern finishes, and is close to all amenities including schools, shopping centers, and restaurants. The property is fully walled with 24/7 security, water tank, and generator backup.',
+                features: ['Parking', '24/7 Security', 'Water Tank', 'Generator', 'Garden', 'Balcony'],
+                owner: {
+                    name: 'Alemitu Tadesse',
+                    avatar: 'AT',
+                    rating: 4.9,
+                    reviews: 128,
+                    verified: true,
+                    memberSince: '2024',
+                    phone: '+251 911 234 567'
+                }
+            };
+            
+            // Update UI
+            document.getElementById('propertyTitle').textContent = currentProperty.title;
+            document.getElementById('propertyLocation').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${currentProperty.location}`;
+            document.getElementById('propertyPrice').textContent = `₿${currentProperty.price.toLocaleString()}`;
+            document.getElementById('bedrooms').textContent = currentProperty.bedrooms;
+            document.getElementById('bathrooms').textContent = currentProperty.bathrooms;
+            document.getElementById('area').textContent = currentProperty.area;
+            document.getElementById('parking').textContent = currentProperty.parking;
+            document.getElementById('propertyDescription').textContent = currentProperty.description;
+            document.getElementById('ownerName').textContent = currentProperty.owner.name;
+            document.getElementById('ownerAvatar').textContent = currentProperty.owner.avatar;
+            document.getElementById('ownerRating').textContent = currentProperty.owner.rating;
+            
+            // Load features
+            const featuresList = document.getElementById('featuresList');
+            featuresList.innerHTML = currentProperty.features.map(feature => `
+                <span class="feature-badge">
+                    <i class="fas fa-check-circle" style="color: var(--green);"></i> ${feature}
+                </span>
+            `).join('');
+            
+            // Load similar properties
+            loadSimilarProperties();
+        }
+        
+        function loadSimilarProperties() {
+            const container = document.getElementById('similarProperties');
+            const similar = [
+                { id: 'PROP002', title: 'Luxury Apartment in Kazanchis', price: 3500000, location: 'Kazanchis' },
+                { id: 'PROP003', title: 'Spacious Family Home in CMC', price: 5200000, location: 'CMC' },
+                { id: 'PROP004', title: 'Modern Condo in Gerji', price: 2800000, location: 'Gerji' }
+            ];
+            
+            container.innerHTML = similar.map(prop => `
+                <div class="property-card" onclick="viewProperty('${prop.id}')">
+                    <div class="property-image">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="property-details">
+                        <h4>${prop.title}</h4>
+                        <p><i class="fas fa-map-marker-alt"></i> ${prop.location}</p>
+                        <p class="property-price">₿${prop.price.toLocaleString()}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function checkFavoriteStatus() {
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            isFavorite = favorites.some(fav => fav.id === currentProperty?.id);
+            
+            const favBtn = document.getElementById('favoriteBtn');
+            if (isFavorite) {
+                favBtn.innerHTML = '<i class="fas fa-heart" style="color: var(--secondary);"></i>';
+            } else {
+                favBtn.innerHTML = '<i class="far fa-heart"></i>';
+            }
+        }
+        
+        function toggleFavorite() {
+            if (!currentUser) {
+                openModal('login');
+                showNotification('Please login to save favorites', 'warning');
+                return;
+            }
+            
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            
+            if (isFavorite) {
+                // Remove from favorites
+                const updated = favorites.filter(fav => fav.id !== currentProperty.id);
+                localStorage.setItem('favorites', JSON.stringify(updated));
+                showNotification('Removed from favorites', 'info');
+            } else {
+                // Add to favorites
+                favorites.push(currentProperty);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                showNotification('Added to favorites', 'success');
+            }
+            
+            isFavorite = !isFavorite;
+            checkFavoriteStatus();
+        }
+        
+        function shareProperty() {
+            if (navigator.share) {
+                navigator.share({
+                    title: currentProperty.title,
+                    text: currentProperty.description,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback
+                navigator.clipboard.writeText(window.location.href);
+                showNotification('Link copied to clipboard!', 'success');
+            }
+        }
+        
+        function printProperty() {
+            window.print();
+        }
+        
+        function openChat() {
+            if (!currentUser) {
+                openModal('login');
+                showNotification('Please login to chat', 'warning');
+                return;
+            }
+            
+            localStorage.setItem('chatWith', JSON.stringify({
+                ownerId: currentProperty.owner.name,
+                propertyId: currentProperty.id
+            }));
+            window.location.href = 'messages.html';
+        }
+        
+        function callOwner() {
+            window.location.href = `tel:${currentProperty.owner.phone}`;
+        }
+        
+        function scheduleVisit() {
+            if (!currentUser) {
+                openModal('login');
+                return;
+            }
+            openModal('schedule');
+        }
+        
+        function makeOffer() {
+            if (!currentUser) {
+                openModal('login');
+                return;
+            }
+            openModal('offer');
+        }
+        
+        // Handle schedule form submission
+        document.getElementById('scheduleForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const visitData = {
+                date: document.getElementById('visitDate').value,
+                time: document.getElementById('visitTime').value,
+                name: document.getElementById('visitorName').value,
+                phone: document.getElementById('visitorPhone').value,
+                message: document.getElementById('visitMessage').value,
+                propertyId: currentProperty.id
+            };
+            
+            showNotification('Visit request sent! Owner will contact you soon.', 'success');
+            closeModal('schedule');
+            
+            // Save to localStorage
+            const visits = JSON.parse(localStorage.getItem('scheduledVisits') || '[]');
+            visits.push(visitData);
+            localStorage.setItem('scheduledVisits', JSON.stringify(visits));
+        });
+        
+        // Handle offer form submission
+        document.getElementById('offerForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const offerData = {
+                amount: document.getElementById('offerAmount').value,
+                name: document.getElementById('offerName').value,
+                phone: document.getElementById('offerPhone').value,
+                message: document.getElementById('offerMessage').value,
+                propertyId: currentProperty.id,
+                timestamp: new Date().toISOString()
+            };
+            
+            showNotification(`Offer of ₿${offerData.amount} submitted!`, 'success');
+            closeModal('offer');
+            
+            // Save to localStorage
+            const offers = JSON.parse(localStorage.getItem('offers') || '[]');
+            offers.push(offerData);
+            localStorage.setItem('offers', JSON.stringify(offers));
+        });
+    </script>
+
+    <script src="js/language.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

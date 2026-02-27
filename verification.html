@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FaydaID Verification - HomeDirect Ethiopia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .verification-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 2rem;
+        }
+        
+        .verification-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .verification-header h1 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .verification-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 3rem 0;
+            position: relative;
+        }
+        
+        .verification-steps::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gray);
+            z-index: 1;
+        }
+        
+        .step-indicator {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 2px solid var(--gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: 700;
+            background: white;
+        }
+        
+        .step-indicator.active .step-circle {
+            background: var(--gradient-primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .step-indicator.completed .step-circle {
+            background: var(--green);
+            color: white;
+            border-color: var(--green);
+        }
+        
+        .verification-card {
+            background: white;
+            border-radius: var(--border-radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .id-upload-area {
+            border: 2px dashed var(--primary);
+            border-radius: var(--border-radius);
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 2rem 0;
+        }
+        
+        .id-upload-area:hover {
+            background: rgba(30,58,95,0.05);
+            border-color: var(--secondary);
+        }
+        
+        .id-upload-area i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .id-preview {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        .id-preview-item {
+            width: 100px;
+            height: 100px;
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .id-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+        }
+        
+        .remove-image {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .verification-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .method-card {
+            padding: 1.5rem;
+            border: 1px solid var(--gray);
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .method-card:hover,
+        .method-card.selected {
+            border-color: var(--primary);
+            background: rgba(30,58,95,0.05);
+        }
+        
+        .method-card i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .otp-input {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        
+        .otp-input input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 1.5rem;
+            border: 1px solid var(--gray);
+            border-radius: var(--border-radius);
+        }
+        
+        .otp-input input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .verification-success {
+            text-align: center;
+            padding: 3rem;
+        }
+        
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 2rem;
+            animation: scaleIn 0.5s ease;
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+        
+        .verified-badge-large {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--gradient-success);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo" onclick="navigateTo('index')">
+            HomeDirect <span class="amharic">ሆምዳይሬክት</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" data-en="Home" data-am="መነሻ">Home</a>
+            <a href="buy.html" data-en="Buy" data-am="መግዛት">Buy</a>
+            <a href="rent.html" data-en="Rent" data-am="ማከራየት">Rent</a>
+            <a href="sell.html" data-en="Sell" data-am="መሸጥ">Sell</a>
+            <a href="#" onclick="openModal('login')" data-en="Login" data-am="ግባ">Login</a>
+            <button class="btn btn-primary" onclick="openModal('signup')" data-en="Sign Up" data-am="ተመዝገብ">Sign Up</button>
+        </div>
+        <div class="mobile-menu" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- Verification Container -->
+    <div class="verification-container">
+        <div class="verification-header">
+            <h1 data-en="FaydaID Verification" data-am="ፋይዳ አይዲ ማረጋገጫ">
+                FaydaID Verification
+            </h1>
+            <p data-en="Verify your identity to build trust and unlock all features"
+               data-am="መተማመንን ለመፍጠር እና ሁሉንም አገልግሎቶች ለመክፈት ማንነትዎን ያረጋግጡ">
+                Verify your identity to build trust and unlock all features
+            </p>
+        </div>
+
+        <!-- Step Indicator -->
+        <div class="verification-steps">
+            <div class="step-indicator active" id="step1">
+                <div class="step-circle">1</div>
+                <span data-en="Choose Method" data-am="ዘዴ ይምረጡ">Choose Method</span>
+            </div>
+            <div class="step-indicator" id="step2">
+                <div class="step-circle">2</div>
+                <span data-en="Upload ID" data-am="መታወቂያ ይስቀሉ">Upload ID</span>
+            </div>
+            <div class="step-indicator" id="step3">
+                <div class="step-circle">3</div>
+                <span data-en="Verify" data-am="ያረጋግጡ">Verify</span>
+            </div>
+            <div class="step-indicator" id="step4">
+                <div class="step-circle">4</div>
+                <span data-en="Complete" data-am="ተጠናቋል">Complete</span>
+            </div>
+        </div>
+
+        <!-- Step 1: Choose Method -->
+        <div class="verification-card" id="methodStep">
+            <h2 style="margin-bottom: 2rem;" data-en="Choose Verification Method" data-am="የማረጋገጫ ዘዴ ይምረጡ">
+                Choose Verification Method
+            </h2>
+            
+            <div class="verification-methods">
+                <div class="method-card" onclick="selectMethod('faydaid')">
+                    <i class="fas fa-id-card"></i>
+                    <h3 data-en="FaydaID" data-am="ፋይዳ አይዲ">FaydaID</h3>
+                    <p data-en="Verify using your Ethiopian ID"
+                       data-am="በኢትዮጵያ መታወቂያዎ ያረጋግጡ">
+                        Verify using your Ethiopian ID
+                    </p>
+                </div>
+                
+                <div class="method-card" onclick="selectMethod('passport')">
+                    <i class="fas fa-passport"></i>
+                    <h3 data-en="Passport" data-am="ፓስፖርት">Passport</h3>
+                    <p data-en="International passport verification"
+                       data-am="አለም አቀፍ ፓስፖርት ማረጋገጫ">
+                        International passport verification
+                    </p>
+                </div>
+                
+                <div class="method-card" onclick="selectMethod('drivers')">
+                    <i class="fas fa-car"></i>
+                    <h3 data-en="Driver's License" data-am="የመንጃ ፍቃድ">Driver's License</h3>
+                    <p data-en="Verify with your driving license"
+                       data-am="በመንጃ ፍቃድዎ ያረጋግጡ">
+                        Verify with your driving license
+                    </p>
+                </div>
+                
+                <div class="method-card" onclick="selectMethod('voter')">
+                    <i class="fas fa-vote-yea"></i>
+                    <h3 data-en="Voter ID" data-am="የመራጭ መታወቂያ">Voter ID</h3>
+                    <p data-en="Voter identification card"
+                       data-am="የመራጭ መታወቂያ ካርድ">
+                        Voter identification card
+                    </p>
+                </div>
+            </div>
+            
+            <div style="text-align: right; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="nextStep('method')" disabled id="nextMethodBtn">
+                    <span data-en="Continue" data-am="ቀጥል">Continue</span> →
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Upload ID -->
+        <div class="verification-card" id="uploadStep" style="display: none;">
+            <h2 style="margin-bottom: 2rem;" data-en="Upload Your ID" data-am="መታወቂያዎን ይስቀሉ">
+                Upload Your ID
+            </h2>
+            
+            <div class="id-upload-area" onclick="document.getElementById('idFile').click()">
+                <input type="file" id="idFile" accept="image/*" multiple style="display: none;" onchange="handleFileUpload(event)">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3 data-en="Click to upload or drag and drop" data-am="ለመስቀል ይጫኑ ወይም ጎትተው ይጣሉ">
+                    Click to upload or drag and drop
+                </h3>
+                <p data-en="Supported formats: JPG, PNG, PDF (Max 5MB)"
+                   data-am="የሚደገፉ ቅርጸቶች፡ JPG, PNG, PDF (ከፍተኛ 5MB)">
+                    Supported formats: JPG, PNG, PDF (Max 5MB)
+                </p>
+            </div>
+            
+            <div class="id-preview" id="idPreview"></div>
+            
+            <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                <button class="btn btn-outline" onclick="prevStep('upload')">
+                    ← <span data-en="Back" data-am="ተመለስ">Back</span>
+                </button>
+                <button class="btn btn-primary" onclick="nextStep('upload')" disabled id="nextUploadBtn">
+                    <span data-en="Continue" data-am="ቀጥል">Continue</span> →
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Verification -->
+        <div class="verification-card" id="verifyStep" style="display: none;">
+            <h2 style="margin-bottom: 2rem;" data-en="Verify Your Identity" data-am="ማንነትዎን ያረጋግጡ">
+                Verify Your Identity
+            </h2>
+            
+            <div style="text-align: center;">
+                <i class="fas fa-shield-alt" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                <p data-en="We'll send a verification code to your registered phone"
+                   data-am="የማረጋገጫ ኮድ ወደ ስልክ ቁጥርዎ እንልካለን">
+                    We'll send a verification code to your registered phone
+                </p>
+                
+                <div class="otp-input">
+                    <input type="text" maxlength="1" onkeyup="moveToNext(this, 0)">
+                    <input type="text" maxlength="1" onkeyup="moveToNext(this, 1)">
+                    <input type="text" maxlength="1" onkeyup="moveToNext(this, 2)">
+                    <input type="text" maxlength="1" onkeyup="moveToNext(this, 3)">
+                    <input type="text" maxlength="1" onkeyup="moveToNext(this, 4)">
+                    <input type="text" maxlength="1" onkeyup="moveToNext(this, 5)">
+                </div>
+                
+                <p>
+                    <span data-en="Didn't receive code?" data-am="ኮድ አልደረሰዎትም?">Didn't receive code?</span>
+                    <a href="#" onclick="resendCode()" data-en="Resend" data-am="እንደገና ላክ">Resend</a>
+                </p>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; margin-top: 2rem;">
+                <button class="btn btn-outline" onclick="prevStep('verify')">
+                    ← <span data-en="Back" data-am="ተመለስ">Back</span>
+                </button>
+                <button class="btn btn-primary" onclick="verifyCode()">
+                    <span data-en="Verify" data-am="አረጋግጥ">Verify</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 4: Success -->
+        <div class="verification-card" id="successStep" style="display: none;">
+            <div class="verification-success">
+                <div class="success-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                
+                <div class="verified-badge-large">
+                    <i class="fas fa-check-circle"></i>
+                    <span data-en="FaydaID Verified" data-am="ፋይዳ አይዲ ተረጋግጧል">FaydaID Verified</span>
+                </div>
+                
+                <h2 data-en="Verification Successful!" data-am="ማረጋገጫ ተሳክቷል!">
+                    Verification Successful!
+                </h2>
+                
+                <p data-en="Your identity has been verified. You now have full access to all features."
+                   data-am="ማንነትዎ ተረጋግጧል። አሁን ሁሉንም አገልግሎቶች መጠቀም ይችላሉ።">
+                    Your identity has been verified. You now have full access to all features.
+                </p>
+                
+                <div style="margin-top: 3rem;">
+                    <button class="btn btn-primary btn-large" onclick="navigateTo('dashboard')">
+                        <span data-en="Go to Dashboard" data-am="ወደ ዳሽቦርድ ይሂዱ">Go to Dashboard</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedMethod = null;
+        let uploadedFiles = [];
+        
+        function selectMethod(method) {
+            selectedMethod = method;
+            
+            // Remove selected class from all cards
+            document.querySelectorAll('.method-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked card
+            event.currentTarget.classList.add('selected');
+            
+            // Enable continue button
+            document.getElementById('nextMethodBtn').disabled = false;
+        }
+        
+        function handleFileUpload(event) {
+            const files = Array.from(event.target.files);
+            uploadedFiles = [...uploadedFiles, ...files];
+            
+            const preview = document.getElementById('idPreview');
+            preview.innerHTML = '';
+            
+            uploadedFiles.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const item = document.createElement('div');
+                    item.className = 'id-preview-item';
+                    item.innerHTML = `
+                        <img src="${e.target.result}" alt="ID Preview">
+                        <div class="remove-image" onclick="removeFile(${index})">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    `;
+                    preview.appendChild(item);
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            // Enable continue button
+            document.getElementById('nextUploadBtn').disabled = false;
+        }
+        
+        function removeFile(index) {
+            uploadedFiles.splice(index, 1);
+            handleFileUpload({ target: { files: uploadedFiles } });
+            
+            if (uploadedFiles.length === 0) {
+                document.getElementById('nextUploadBtn').disabled = true;
+            }
+        }
+        
+        function moveToNext(input, index) {
+            if (input.value.length === 1) {
+                const next = document.querySelectorAll('.otp-input input')[index + 1];
+                if (next) next.focus();
+            }
+        }
+        
+        function nextStep(step) {
+            if (step === 'method') {
+                document.getElementById('methodStep').style.display = 'none';
+                document.getElementById('uploadStep').style.display = 'block';
+                
+                // Update step indicator
+                document.getElementById('step1').classList.remove('active');
+                document.getElementById('step1').classList.add('completed');
+                document.getElementById('step2').classList.add('active');
+            } else if (step === 'upload') {
+                document.getElementById('uploadStep').style.display = 'none';
+                document.getElementById('verifyStep').style.display = 'block';
+                
+                // Update step indicator
+                document.getElementById('step2').classList.remove('active');
+                document.getElementById('step2').classList.add('completed');
+                document.getElementById('step3').classList.add('active');
+            }
+        }
+        
+        function prevStep(step) {
+            if (step === 'upload') {
+                document.getElementById('uploadStep').style.display = 'none';
+                document.getElementById('methodStep').style.display = 'block';
+                
+                // Update step indicator
+                document.getElementById('step2').classList.remove('active');
+                document.getElementById('step1').classList.add('active');
+                document.getElementById('step1').classList.remove('completed');
+            } else if (step === 'verify') {
+                document.getElementById('verifyStep').style.display = 'none';
+                document.getElementById('uploadStep').style.display = 'block';
+                
+                // Update step indicator
+                document.getElementById('step3').classList.remove('active');
+                document.getElementById('step2').classList.add('active');
+                document.getElementById('step2').classList.remove('completed');
+            }
+        }
+        
+        function verifyCode() {
+            showNotification('Verifying...', 'info');
+            
+            // Simulate verification
+            setTimeout(() => {
+                document.getElementById('verifyStep').style.display = 'none';
+                document.getElementById('successStep').style.display = 'block';
+                
+                // Update step indicator
+                document.getElementById('step3').classList.remove('active');
+                document.getElementById('step3').classList.add('completed');
+                document.getElementById('step4').classList.add('active');
+                
+                // Update user verification status
+                if (currentUser) {
+                    currentUser.verified = true;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                }
+                
+                showNotification('Verification successful!', 'success');
+            }, 2000);
+        }
+        
+        function resendCode() {
+            showNotification('New code sent!', 'info');
+        }
+    </script>
+
+    <script src="js/language.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

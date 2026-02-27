@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeDirect Ethiopia | ቤትዎን በቀጥታ ያግኙ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Language Switcher -->
+    <div class="language-switcher" id="languageSwitcher">
+        <button class="lang-btn active" onclick="switchLanguage('en')">🇬🇧 English</button>
+        <button class="lang-btn" onclick="switchLanguage('am')">🇪🇹 አማርኛ</button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo" onclick="navigateTo('index')">
+            HomeDirect <span class="amharic">ሆምዳይሬክት</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="active" data-en="Home" data-am="መነሻ">Home</a>
+            <a href="buy.html" data-en="Buy" data-am="መግዛት">Buy</a>
+            <a href="rent.html" data-en="Rent" data-am="ማከራየት">Rent</a>
+            <a href="sell.html" data-en="Sell" data-am="መሸጥ">Sell</a>
+            <a href="#" onclick="openModal('login')" data-en="Login" data-am="ግባ">Login</a>
+            <button class="btn btn-primary" onclick="openModal('signup')" data-en="Sign Up" data-am="ተመዝገብ">Sign Up</button>
+        </div>
+        <div class="mobile-menu" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>
+                <span data-en="Find Your Dream Home Without Brokerage" 
+                      data-am="ሕልምዎ የሆነ ቤት ያግኙ ያለ ደላላ">
+                    Find Your Dream Home Without Brokerage
+                </span>
+            </h1>
+            <p data-en="Direct owner listings • Verified properties • Secure payments • Zero commission"
+               data-am="በቀጥታ ከባለቤት • የተረጋገጠ ንብረት • አስተማማኝ ክፍያ • ዜሮ ኮሚሽን">
+                Direct owner listings • Verified properties • Secure payments • Zero commission
+            </p>
+            
+            <div class="search-bar">
+                <input type="text" id="searchInput" 
+                       data-en="Search by location, property type or budget..."
+                       data-am="በአካባቢ፣ በንብረት አይነት ወይም በበጀት ይፈልጉ...">
+                <button onclick="searchProperties()">
+                    <i class="fas fa-search"></i> 
+                    <span data-en="Search" data-am="ፈልግ">Search</span>
+                </button>
+            </div>
+
+            <div class="stats" id="liveStats">
+                <div class="stat-item">
+                    <span class="stat-number" id="propertyCount">5,234</span>
+                    <span class="stat-label" data-en="Properties" data-am="ንብረቶች">Properties</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="ownerCount">2,891</span>
+                    <span class="stat-label" data-en="Verified Owners" data-am="የተረጋገጡ ባለቤቶች">Verified Owners</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="userCount">3,456</span>
+                    <span class="stat-label" data-en="Happy Users" data-am="ደስተኛ ተጠቃሚዎች">Happy Users</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="savedAmount">₿12.5M</span>
+                    <span class="stat-label" data-en="Saved in Brokerage" data-am="ከደላላ የተቆጠበ">Saved in Brokerage</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>
+                    <span data-en="Everything You Need in One Platform"
+                          data-am="ሁሉም አገልግሎት በአንድ መድረክ">
+                        Everything You Need in One Platform
+                    </span>
+                </h2>
+            </div>
+
+            <div class="features-grid">
+                <!-- FaydaID Verification -->
+                <div class="feature-card" onclick="navigateTo('verification')">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <span class="badge" data-en="NEW" data-am="አዲስ">NEW</span>
+                    <h3>
+                        <span data-en="FaydaID Verification"
+                              data-am="ፋይዳ አይዲ ማረጋገጫ">
+                            FaydaID Verification
+                        </span>
+                    </h3>
+                    <p data-en="Government ID verification for all users. Verified badges ensure you're dealing with real people."
+                       data-am="ለሁሉም ተጠቃሚዎች የመንግስት መታወቂያ ማረጋገጫ።">
+                        Government ID verification for all users.
+                    </p>
+                    <button class="btn-feature" onclick="event.stopPropagation(); navigateTo('verification')">
+                        <span data-en="Verify Now" data-am="አሁን ያረጋግጡ">Verify Now</span> →
+                    </button>
+                </div>
+
+                <!-- Secure Payments -->
+                <div class="feature-card" onclick="navigateTo('payment')">
+                    <div class="feature-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <span class="badge" data-en="SECURE" data-am="አስተማማኝ">SECURE</span>
+                    <h3>
+                        <span data-en="Multiple Payment Options"
+                              data-am="የተለያዩ የክፍያ አማራጮች">
+                            Multiple Payment Options
+                        </span>
+                    </h3>
+                    <p data-en="TeleBirr, M-Birr, CBE, Dashen and more. All payments protected."
+                       data-am="ቴሌብር፣ ኤምብር፣ ንግድ ባንክ፣ ዳሽን እና ሌሎችም።">
+                        TeleBirr, M-Birr, CBE, Dashen and more.
+                    </p>
+                    <button class="btn-feature" onclick="event.stopPropagation(); navigateTo('payment')">
+                        <span data-en="Pay Now" data-am="አሁን ክፈል">Pay Now</span> →
+                    </button>
+                </div>
+
+                <!-- Escrow Protection -->
+                <div class="feature-card" onclick="navigateTo('escrow')">
+                    <div class="feature-icon">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <span class="badge" data-en="TRUSTED" data-am="የታመነ">TRUSTED</span>
+                    <h3>
+                        <span data-en="Escrow Protection"
+                              data-am="የኤስክሮው መተማመኛ">
+                            Escrow Protection
+                        </span>
+                    </h3>
+                    <p data-en="Money held securely until transaction is complete. 100% refund guarantee."
+                       data-am="ገንዘብ ግብይቱ እስኪጠናቀቅ ድረስ በአስተማማኝ ሁኔታ ይቆያል።">
+                        Money held securely until transaction is complete.
+                    </p>
+                    <button class="btn-feature" onclick="event.stopPropagation(); navigateTo('escrow')">
+                        <span data-en="Learn More" data-am="ተጨማሪ ይወቁ">Learn More</span> →
+                    </button>
+                </div>
+
+                <!-- Digital Agreements -->
+                <div class="feature-card" onclick="navigateTo('agreements')">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-signature"></i>
+                    </div>
+                    <span class="badge" data-en="LEGAL" data-am="ህጋዊ">LEGAL</span>
+                    <h3>
+                        <span data-en="Digital Agreements"
+                              data-am="ዲጂታል ውል">
+                            Digital Agreements
+                        </span>
+                    </h3>
+                    <p data-en="Generate rental agreements instantly. E-sign with Ethiopian ID."
+                       data-am="የኪራይ ውል በቅጽበት ይፍጠሩ። በኢትዮጵያ መታወቂያ ይፈርሙ።">
+                        Generate rental agreements instantly.
+                    </p>
+                    <button class="btn-feature" onclick="event.stopPropagation(); navigateTo('agreements')">
+                        <span data-en="Create Agreement" data-am="ውል ፍጠር">Create Agreement</span> →
+                    </button>
+                </div>
+
+                <!-- AI Price Predictor -->
+                <div class="feature-card" onclick="navigateTo('price-predictor')">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <span class="badge" data-en="AI POWERED" data-am="በአይ የተጎላበተ">AI POWERED</span>
+                    <h3>
+                        <span data-en="Smart Price Predictor"
+                              data-am="ብልህ የዋጋ መተንበያ">
+                            Smart Price Predictor
+                        </span>
+                    </h3>
+                    <p data-en="AI suggests fair market price based on location and amenities."
+                       data-am="ኤአይ በአካባቢ እና በመገልገያዎች ላይ በመመስረት ትክክለኛ ዋጋ ይጠቁማል።">
+                        AI suggests fair market price.
+                    </p>
+                    <button class="btn-feature" onclick="event.stopPropagation(); navigateTo('price-predictor')">
+                        <span data-en="Predict Price" data-am="ዋጋ ተንበይ">Predict Price</span> →
+                    </button>
+                </div>
+
+                <!-- Direct Chat -->
+                <div class="feature-card" onclick="navigateTo('messages')">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <span class="badge" data-en="LIVE" data-am="ቀጥታ">LIVE</span>
+                    <h3>
+                        <span data-en="Direct Owner Chat"
+                              data-am="በቀጥታ ከባለቤት ጋር ውይይት">
+                            Direct Owner Chat
+                        </span>
+                    </h3>
+                    <p data-en="Real-time messaging with property owners. Instant responses."
+                       data-am="ከንብረት ባለቤቶች ጋር በቅጽበት መልእክት።">
+                        Real-time messaging with property owners.
+                    </p>
+                    <button class="btn-feature" onclick="event.stopPropagation(); navigateTo('messages')">
+                        <span data-en="Start Chat" data-am="ውይይት ጀምር">Start Chat</span> →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Properties -->
+    <section class="featured-properties">
+        <div class="container">
+            <div class="section-title">
+                <h2>
+                    <span data-en="Featured Properties"
+                          data-am="ተመራጭ ንብረቶች">
+                        Featured Properties
+                    </span>
+                </h2>
+                <p data-en="Direct from verified owners in Addis Ababa"
+                   data-am="በአዲስ አበባ ውስጥ ከተረጋገጡ ባለቤቶች በቀጥታ">
+                    Direct from verified owners in Addis Ababa
+                </p>
+            </div>
+
+            <div class="properties-grid" id="featuredProperties">
+                <!-- Properties will be loaded dynamically via JavaScript -->
+            </div>
+
+            <div class="view-all">
+                <button class="btn btn-primary" onclick="navigateTo('buy')">
+                    <span data-en="View All Properties" data-am="ሁሉንም ንብረቶች ይመልከቱ">View All Properties</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>
+                    <span data-en="How It Works"
+                          data-am="እንዴት ይሰራል">
+                        How It Works
+                    </span>
+                </h2>
+            </div>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <i class="fas fa-id-card"></i>
+                    <h3 data-en="Verify with FaydaID" data-am="በፋይዳ አይዲ ያረጋግጡ">Verify with FaydaID</h3>
+                    <p data-en="Complete your Ethiopian ID verification"
+                       data-am="የኢትዮጵያ መታወቂያዎን ያረጋግጡ">
+                        Complete your Ethiopian ID verification
+                    </p>
+                    <button class="btn-step" onclick="navigateTo('verification')">
+                        <span data-en="Get Verified" data-am="ይመዝገቡ">Get Verified</span>
+                    </button>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <i class="fas fa-search"></i>
+                    <h3 data-en="Search Properties" data-am="ንብረት ይፈልጉ">Search Properties</h3>
+                    <p data-en="Find your dream home with filters"
+                       data-am="ሕልምዎ የሆነ ቤት በማጣሪያ ይፈልጉ">
+                        Find your dream home with filters
+                    </p>
+                    <button class="btn-step" onclick="navigateTo('buy')">
+                        <span data-en="Search Now" data-am="አሁን ፈልግ">Search Now</span>
+                    </button>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <h3 data-en="Pay Securely" data-am="በአስተማማኝ ሁኔታ ይክፈሉ">Pay Securely</h3>
+                    <p data-en="Use TeleBirr, M-Birr, or bank transfer"
+                       data-am="ቴሌብር፣ ኤምብር ወይም የባንክ ዝውውር ይጠቀሙ">
+                        Use TeleBirr, M-Birr, or bank transfer
+                    </p>
+                    <button class="btn-step" onclick="navigateTo('payment')">
+                        <span data-en="Make Payment" data-am="ክፍያ ይክፈሉ">Make Payment</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>
+                    <span data-en="What Our Users Say"
+                          data-am="ተጠቃሚዎቻችን ምን ይላሉ">
+                        What Our Users Say
+                    </span>
+                </h2>
+            </div>
+
+            <div class="testimonials-slider" id="testimonials">
+                <!-- Testimonials loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta">
+        <div class="container">
+            <h2>
+                <span data-en="Ready to Find Your Dream Home?"
+                      data-am="ሕልምዎ የሆነ ቤት ለማግኘት ዝግጁ ነዎት?">
+                    Ready to Find Your Dream Home?
+                </span>
+            </h2>
+            <p data-en="Join thousands of Ethiopians who saved money by avoiding brokers"
+               data-am="ደላላን በማስወገድ ገንዘብ ከቆጠቡ በሺዎች ከሚቆጠሩ ኢትዮጵያውያን ጋር ይቀላቀሉ">
+                Join thousands of Ethiopians who saved money by avoiding brokers
+            </p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary btn-large" onclick="openModal('signup')">
+                    <span data-en="Get Started Now" data-am="አሁን ይጀምሩ">Get Started Now</span>
+                </button>
+                <button class="btn btn-outline btn-large" onclick="navigateTo('how-it-works')">
+                    <span data-en="Learn More" data-am="ተጨማሪ ይወቁ">Learn More</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>HomeDirect Ethiopia</h3>
+                    <p data-en="Ethiopia's most trusted broker-free property platform."
+                       data-am="የኢትዮጵያ በጣም ታማኝ ከደላላ ነፃ የንብረት መድረክ።">
+                        Ethiopia's most trusted broker-free property platform.
+                    </p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3 data-en="Quick Links" data-am="ፈጣን አገናኞች">Quick Links</h3>
+                    <a href="about.html" data-en="About Us" data-am="ስለ እኛ">About Us</a>
+                    <a href="contact.html" data-en="Contact" data-am="አድራሻ">Contact</a>
+                    <a href="faq.html" data-en="FAQ" data-am="ተደጋጋሚ ጥያቄዎች">FAQ</a>
+                    <a href="terms.html" data-en="Terms" data-am="ደንቦች">Terms</a>
+                    <a href="privacy.html" data-en="Privacy" data-am="ግላዊነት">Privacy</a>
+                </div>
+                <div class="footer-section">
+                    <h3 data-en="For Owners" data-am="ለባለቤቶች">For Owners</h3>
+                    <a href="sell.html" data-en="Post Property" data-am="ንብረት ለጥፍ">Post Property</a>
+                    <a href="dashboard.html" data-en="Dashboard" data-am="ዳሽቦርድ">Dashboard</a>
+                    <a href="verification.html" data-en="Get Verified" data-am="ይመዝገቡ">Get Verified</a>
+                    <a href="pricing.html" data-en="Pricing" data-am="ዋጋ">Pricing</a>
+                </div>
+                <div class="footer-section">
+                    <h3 data-en="For Buyers" data-am="ለገዢዎች">For Buyers</h3>
+                    <a href="buy.html" data-en="Search Properties" data-am="ንብረት ፈልግ">Search Properties</a>
+                    <a href="favorites.html" data-en="Favorites" data-am="የምትወዷቸው">Favorites</a>
+                    <a href="calculator.html" data-en="Mortgage Calculator" data-am="የብድር አስሊ">Mortgage Calculator</a>
+                    <a href="alerts.html" data-en="Price Alerts" data-am="የዋጋ ማስጠንቀቂያ">Price Alerts</a>
+                </div>
+                <div class="footer-section">
+                    <h3 data-en="Contact Info" data-am="የመገኛ አድራሻ">Contact Info</h3>
+                    <p><i class="fas fa-phone"></i> +251 911 234 567</p>
+                    <p><i class="fas fa-envelope"></i> support@homedirect.et</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Bole, Addis Ababa</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 HomeDirect Ethiopia. <span data-en="All rights reserved." data-am="መብቱ በህግ የተጠበቀ ነው።">All rights reserved.</span></p>
+                <p class="amharic">በኢትዮጵያ የተሰራ</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('login')">&times;</span>
+            <h2 data-en="Login to HomeDirect" data-am="ወደ ሆምዳይሬክት ይግቡ">Login to HomeDirect</h2>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label data-en="Email or Phone" data-am="ኢሜይል ወይም ስልክ">Email or Phone</label>
+                    <input type="text" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label data-en="Password" data-am="የይለፍ ቃል">Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <span data-en="Login" data-am="ግባ">Login</span>
+                    </button>
+                </div>
+                <p>
+                    <span data-en="Don't have an account?" data-amመለያ የለዎትም?">Don't have an account?</span>
+                    <a href="#" onclick="switchModal('signup')" data-en="Sign Up" data-am="ተመዝገብ">Sign Up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signup')">&times;</span>
+            <h2 data-en="Create Account" data-amመለያ ይፍጠሩ">Create Account</h2>
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label data-en="Full Name" data-am="ሙሉ ስም">Full Name</label>
+                    <input type="text" id="signupName" required>
+                </div>
+                <div class="form-group">
+                    <label data-en="Email" data-am="ኢሜይል">Email</label>
+                    <input type="email" id="signupEmail" required>
+                </div>
+                <div class="form-group">
+                    <label data-en="Phone" data-am="ስልክ">Phone</label>
+                    <input type="tel" id="signupPhone" required>
+                </div>
+                <div class="form-group">
+                    <label data-en="Password" data-am="የይለፍ ቃል">Password</label>
+                    <input type="password" id="signupPassword" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <span data-en="Sign Up" data-am="ተመዝገብ">Sign Up</span>
+                    </button>
+                </div>
+                <p>
+                    <span data-en="Already have an account?" data-amመለያ አለዎት?">Already have an account?</span>
+                    <a href="#" onclick="switchModal('login')" data-en="Login" data-am="ግባ">Login</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/language.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/properties.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
